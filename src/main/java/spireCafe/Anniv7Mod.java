@@ -241,18 +241,18 @@ public class Anniv7Mod implements
         BaseMod.addSaveField(SavableCurrentRunSeenInteractables.SaveKey, new SavableCurrentRunSeenInteractables());
     }
 
-    public static final ImFloat shake_power = new ImFloat();
-    public static final ImFloat shake_rate = new ImFloat();
-    public static final ImFloat shake_speed = new ImFloat();
-    public static final ImFloat shake_block_size = new ImFloat();
-    public static final ImFloat shake_color_rate = new ImFloat();
+    public static final ImFloat shake_power = new ImFloat(0.007f);
+    public static final ImFloat shake_rate = new ImFloat(0.1f);
+    public static final ImFloat shake_speed = new ImFloat(2f);
+    public static final ImFloat shake_block_size = new ImFloat(0.001f);
+    public static final ImFloat shake_color_rate = new ImFloat(0.004f);
 
     @Override
     public void receiveImGui() {
-        ImGui.sliderFloat("Glitch Power", shake_power.getData(), 0, 0.003f);
+        ImGui.sliderFloat("Glitch Power", shake_power.getData(), 0, 0.01f);
         ImGui.sliderFloat("Glitch Rate", shake_rate.getData(), 0, 1);
         ImGui.sliderFloat("Glitch Speed", shake_speed.getData(), 0, 10);
-        ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 0.1f);
+        ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 0.002f);
         ImGui.sliderFloat("Glitch Color Rate", shake_color_rate.getData(), 0, 0.01f);
     }
 
@@ -398,6 +398,7 @@ public class Anniv7Mod implements
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
+        time = time % 100;
     }
 
     private ModPanel settingsPanel;

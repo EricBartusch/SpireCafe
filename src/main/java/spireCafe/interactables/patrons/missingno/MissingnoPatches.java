@@ -69,7 +69,7 @@ public class MissingnoPatches {
             glitchShader = initGlitchShader(glitchShader);
             sb.begin();
             sb.setShader(glitchShader);
-            glitchShader.setUniformf("u_time", time);
+            glitchShader.setUniformf("u_time", (time % 10) + 200);
             glitchShader.setUniformf("u_shake_power", shake_power.get());
             glitchShader.setUniformf("u_shake_rate", shake_rate.get());
             glitchShader.setUniformf("u_shake_speed", shake_speed.get());

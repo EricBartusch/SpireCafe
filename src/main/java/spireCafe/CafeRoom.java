@@ -74,7 +74,7 @@ public class CafeRoom extends AbstractEvent {
 
         Collections.shuffle(possibleBartenders, new java.util.Random(rng.randomLong()));
         this.bartender = (AbstractBartender) createInteractable(possibleBartenders.get(0), 1200 * Settings.xScale, AbstractDungeon.floorY + 100 * Settings.yScale);
-        Anniv7Mod.currentRunSeenInteractables.add(bartender.id);
+        //Anniv7Mod.currentRunSeenInteractables.add(bartender.id);
 
         //TODO: Fix position logic so overlap is accounted for and prevented
         int numPatrons = 3;
@@ -89,12 +89,12 @@ public class CafeRoom extends AbstractEvent {
 
         Collections.shuffle(possibleAttractions, new java.util.Random(rng.randomLong()));
         this.attraction = (AbstractAttraction) createInteractable(possibleAttractions.get(0), 600 * Settings.xScale, AbstractDungeon.floorY);
-        Anniv7Mod.currentRunSeenInteractables.add(attraction.id);
+        //Anniv7Mod.currentRunSeenInteractables.add(attraction.id);
 
         Collections.shuffle(possibleMerchants, new java.util.Random(rng.randomLong()));
         this.merchant = (AbstractMerchant) createInteractable(possibleMerchants.get(0), 200 * Settings.xScale, AbstractDungeon.floorY);
         merchant.initialize();
-        Anniv7Mod.currentRunSeenInteractables.add(merchant.id);
+        //Anniv7Mod.currentRunSeenInteractables.add(merchant.id);
     }
 
     @Override

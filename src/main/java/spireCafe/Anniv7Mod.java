@@ -249,10 +249,10 @@ public class Anniv7Mod implements
 
     @Override
     public void receiveImGui() {
-        ImGui.sliderFloat("Glitch Power", shake_power.getData(), 0, 0.01f);
+        ImGui.sliderFloat("Glitch Power", shake_power.getData(), 0, 1f);
         ImGui.sliderFloat("Glitch Rate", shake_rate.getData(), 0, 1);
         ImGui.sliderFloat("Glitch Speed", shake_speed.getData(), 0, 10);
-        ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 0.002f);
+        ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 1.0f);
         ImGui.sliderFloat("Glitch Color Rate", shake_color_rate.getData(), 0, 0.01f);
     }
 

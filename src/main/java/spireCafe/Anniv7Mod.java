@@ -19,6 +19,8 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
+import imgui.ImGui;
+import imgui.type.ImFloat;
 import javassist.CtClass;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -50,7 +52,9 @@ public class Anniv7Mod implements
         EditStringsSubscriber,
         EditKeywordsSubscriber,
         PostInitializeSubscriber,
-        AddAudioSubscriber {
+        AddAudioSubscriber,
+        PostUpdateSubscriber,
+        ImGuiSubscriber {
 
     public static final Logger logger = LogManager.getLogger("SpireCafe");
 
@@ -237,6 +241,21 @@ public class Anniv7Mod implements
         BaseMod.addSaveField(SavableCurrentRunSeenInteractables.SaveKey, new SavableCurrentRunSeenInteractables());
     }
 
+    public static final ImFloat shake_power = new ImFloat();
+    public static final ImFloat shake_rate = new ImFloat();
+    public static final ImFloat shake_speed = new ImFloat();
+    public static final ImFloat shake_block_size = new ImFloat();
+    public static final ImFloat shake_color_rate = new ImFloat();
+
+    @Override
+    public void receiveImGui() {
+        ImGui.sliderFloat("Glitch Power", shake_power.getData(), 0, 0.003f);
+        ImGui.sliderFloat("Glitch Rate", shake_rate.getData(), 0, 1);
+        ImGui.sliderFloat("Glitch Speed", shake_speed.getData(), 0, 10);
+        ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 0.1f);
+        ImGui.sliderFloat("Glitch Color Rate", shake_color_rate.getData(), 0, 0.01f);
+    }
+
     public static class SavableCurrentRunSeenInteractables implements CustomSavable<HashSet<String>> {
         public final static String SaveKey = "CurrentRunSeenInteractables";
 
@@ -373,6 +392,12 @@ public class Anniv7Mod implements
     public void receiveAddAudio() {
         BaseMod.addAudio(CAFE_ENTRY_SOUND_KEY, makePath("audio/cafe_entry_door_chime.mp3"));
 
+    }
+
+    public static float time = 0f;
+    @Override
+    public void receivePostUpdate() {
+        time += Gdx.graphics.getRawDeltaTime();
     }
 
     private ModPanel settingsPanel;

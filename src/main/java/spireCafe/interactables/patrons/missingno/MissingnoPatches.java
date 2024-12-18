@@ -3,25 +3,19 @@ package spireCafe.interactables.patrons.missingno;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.esotericsoftware.spine.SkeletonMeshRenderer;
-import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
-import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
-import com.megacrit.cardcrawl.ui.buttons.ProceedButton;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
-import spireCafe.patches.CafeEntryExitPatch;
 
 import java.util.ArrayList;
 
@@ -46,14 +40,16 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = Locator.class)
         public static void startBuffer(AbstractPlayer __instance, SpriteBatch sb) {
-            sb.flush();
-            if (buffer == null) {
-                buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+            if(MissingnoUtil.isGlitched()) {
+                sb.flush();
+                if (buffer == null) {
+                    buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+                }
+                buffer.begin();
+                Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+                Gdx.gl.glColorMask(true, true, true, true);
             }
-            buffer.begin();
-            Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
-            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-            Gdx.gl.glColorMask(true, true, true, true);
         }
 
         private static class LocatorTwo extends SpireInsertLocator {
@@ -65,28 +61,30 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = LocatorTwo.class)
         public static void endBufferAndDraw(AbstractPlayer __instance, SpriteBatch sb) {
-            sb.flush();
-            buffer.end();
-            if (playerTexture == null) {
-                playerTexture = new TextureRegion(buffer.getColorBufferTexture());
-                playerTexture.flip(false, true);
-            } else {
-                playerTexture.setTexture(buffer.getColorBufferTexture());
+            if(MissingnoUtil.isGlitched()) {
+                sb.flush();
+                buffer.end();
+                if (playerTexture == null) {
+                    playerTexture = new TextureRegion(buffer.getColorBufferTexture());
+                    playerTexture.flip(false, true);
+                } else {
+                    playerTexture.setTexture(buffer.getColorBufferTexture());
+                }
+                glitchShader = initGlitchShader(glitchShader);
+                sb.begin();
+                sb.setShader(glitchShader);
+                glitchShader.setUniformf("u_time", (time % 10) + 200);
+                glitchShader.setUniformf("u_shake_power", shake_power.get());
+                glitchShader.setUniformf("u_shake_rate", shake_rate.get());
+                glitchShader.setUniformf("u_shake_speed", shake_speed.get());
+                glitchShader.setUniformf("u_shake_block_size", shake_block_size.get());
+                glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
+
+
+                sb.draw(playerTexture, -Settings.VERT_LETTERBOX_AMT, -Settings.HORIZ_LETTERBOX_AMT);
+                sb.setShader(null);
+                sb.end();
             }
-            glitchShader = initGlitchShader(glitchShader);
-            sb.begin();
-            sb.setShader(glitchShader);
-            glitchShader.setUniformf("u_time", (time % 10) + 200);
-            glitchShader.setUniformf("u_shake_power", shake_power.get());
-            glitchShader.setUniformf("u_shake_rate", shake_rate.get());
-            glitchShader.setUniformf("u_shake_speed", shake_speed.get());
-            glitchShader.setUniformf("u_shake_block_size", shake_block_size.get());
-            glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
-
-
-            sb.draw(playerTexture, -Settings.VERT_LETTERBOX_AMT, -Settings.HORIZ_LETTERBOX_AMT);
-            sb.setShader(null);
-            sb.end();
         }
     }
 
@@ -122,5 +120,22 @@ public class MissingnoPatches {
                 return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
             }
         }
+    }
+
+    public static final String MISSINGNO_RELIC_LANDING_SFX = makeID("MissingnoRelic");
+
+    @SpirePatch(clz = AbstractRelic.class, method = "playLandingSFX")
+    public static class PlayMissingnoSoundPatch {
+
+        @SpirePrefixPatch
+        public static SpireReturn<Void> PlaySound(AbstractRelic __instance) {
+            if(__instance.relicId.equals(MissingnoRelic.ID)) {
+                CardCrawlGame.sound.play(MISSINGNO_RELIC_LANDING_SFX);
+                return SpireReturn.Return();
+            } else {
+                return SpireReturn.Continue();
+            }
+        }
+
     }
 }

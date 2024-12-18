@@ -3,12 +3,13 @@ package spireCafe.interactables.patrons.missingno;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 
 import static spireCafe.Anniv7Mod.makeShaderPath;
 
 public class MissingnoUtil {
     public static boolean isGlitched() {
-        return true;
+        return AbstractDungeon.player.hasRelic(MissingnoRelic.ID);
     }
 
     public static ShaderProgram initGlitchShader(ShaderProgram glitchShader) {

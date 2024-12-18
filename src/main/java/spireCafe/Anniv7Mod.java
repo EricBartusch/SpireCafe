@@ -42,6 +42,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static spireCafe.interactables.patrons.missingno.MissingnoPatches.MISSINGNO_RELIC_LANDING_SFX;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
 
 @SuppressWarnings({"unused"})
@@ -391,6 +392,7 @@ public class Anniv7Mod implements
     @Override
     public void receiveAddAudio() {
         BaseMod.addAudio(CAFE_ENTRY_SOUND_KEY, makePath("audio/cafe_entry_door_chime.mp3"));
+        BaseMod.addAudio(MISSINGNO_RELIC_LANDING_SFX, makePath("audio/missingno_relic_landing_sfx.mp3"));
 
     }
 

@@ -152,6 +152,10 @@ public abstract class AbstractCutscene extends AbstractGameEffect {
         }
     }
 
+    public AbstractNPC getCharacter() {
+        return character;
+    }
+
     public void dispose() {
         this.dialog.clear();
     }

@@ -1,5 +1,5 @@
 {
-  "${ModID}:ExamplePatronCutscene": {
+  "${ModID}:MissingnoCutscene": {
     "NAME": "Example patron Cutscene",
     "BLOCKING_TEXTS": [
       "\"Be safe out there.\"",
@@ -19,11 +19,9 @@
       "\"Let me know if you change your mind.\""
     ],
     "OPTIONS": [
-      "I would like you to smith my stuff. ",
-      "Upgrade a card.",
-      "I would like you to remove my stuff. ",
-      "Remove a card.",
-      "I don't want anything."
+      "Um... Yes? ",
+      "<Back away slowly>",
+      "Thank you...?"
     ]
   }
 }

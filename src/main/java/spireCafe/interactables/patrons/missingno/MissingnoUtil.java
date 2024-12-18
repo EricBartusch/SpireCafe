@@ -1,24 +1,29 @@
 package spireCafe.interactables.patrons.missingno;
 
-import basemod.helpers.CardModifierManager;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
-import com.megacrit.cardcrawl.cards.AbstractCard;
-import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.core.CardCrawlGame;
+import com.megacrit.cardcrawl.localization.EventStrings;
 
+import java.io.IOException;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.nio.charset.StandardCharsets;
+import java.util.*;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+
+import static com.evacipated.cardcrawl.modthespire.steam.SteamSearch.findDesktopJar;
 import static spireCafe.Anniv7Mod.makeShaderPath;
+import static spireCafe.Anniv7Mod.modID;
 
 public class MissingnoUtil {
-    public static FrameBuffer createBuffer() {
-        return createBuffer(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-    }
-
     public static FrameBuffer createBuffer(int sizeX, int sizeY) {
         return new FrameBuffer(Pixmap.Format.RGBA8888, sizeX, sizeY, false, false);
     }
@@ -61,5 +66,13 @@ public class MissingnoUtil {
         return glitchShader;
     }
 
+    public static String getRandomEventDescription() {
+        MarkovChain mc = new MarkovChain();
+        FileHandle fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
+        String text = fileHandle.readString(String.valueOf(StandardCharsets.UTF_8));
+        mc.buildChain(text);
+
+        return mc.generateText() + "?";
+    }
 
 }

@@ -1,10 +1,22 @@
 package spireCafe.interactables.patrons.missingno;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+
+import java.nio.charset.StandardCharsets;
 import java.util.*;
+
+import static spireCafe.Anniv7Mod.modID;
 
 public class MarkovChain {
     private Map<String, List<String>> markovChain = new HashMap<>();
     private Random random = new Random();
+
+    public MarkovChain() {
+        FileHandle fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
+        String text = fileHandle.readString(String.valueOf(StandardCharsets.UTF_8));
+        buildChain(text);
+    }
 
     public void buildChain(String text) {
         String[] words = text.split("\\s+");
@@ -39,4 +51,5 @@ public class MarkovChain {
         }
         return result.toString();
     }
+
 }

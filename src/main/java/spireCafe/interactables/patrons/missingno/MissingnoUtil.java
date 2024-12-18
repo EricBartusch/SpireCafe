@@ -35,14 +35,4 @@ public class MissingnoUtil {
         }
         return glitchShader;
     }
-
-    public static String getRandomEventDescription() {
-        MarkovChain mc = new MarkovChain(); //TODO: create once
-        FileHandle fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
-        String text = fileHandle.readString(String.valueOf(StandardCharsets.UTF_8));
-        mc.buildChain(text);
-
-        return mc.generateText() + "?";
-    }
-
 }

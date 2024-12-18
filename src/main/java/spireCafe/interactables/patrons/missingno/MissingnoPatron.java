@@ -19,10 +19,11 @@ import static spireCafe.Anniv7Mod.shake_color_rate;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.initGlitchShader;
 
 public class MissingnoPatron extends AbstractPatron {
+
     public static final String ID = MissingnoPatron.class.getSimpleName();
+    public static final String assetID = "MissingnoRelic";
     private static final CharacterStrings characterStrings = CardCrawlGame.languagePack.getCharacterString(Anniv7Mod.makeID(ID));
     private static ShaderProgram glitchShader = null;
-    private float floatTimer = 0.3f;
     private final float WAVY_DISTANCE = 2.0F * Settings.scale;
     private float wavy_y;
     private float wavyHelper;

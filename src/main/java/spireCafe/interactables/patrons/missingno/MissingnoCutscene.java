@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.LocalizedStrings;
 import spireCafe.abstracts.AbstractCutscene;
@@ -39,6 +40,7 @@ public class MissingnoCutscene extends AbstractCutscene {
             nextDialogue();
             this.dialog.addDialogOption(OPTIONS[0]).setOptionResult((i)->{
                 character.alreadyPerformedTransaction = true;
+                AbstractDungeon.getCurrRoom().spawnRelicAndObtain((float)(Settings.WIDTH / 2), (float)(Settings.HEIGHT / 2), new MissingnoRelic());
                 nextDialogue();
             });
             this.dialog.addDialogOption(OPTIONS[1]).setOptionResult((i)->{

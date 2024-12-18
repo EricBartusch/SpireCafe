@@ -3,18 +3,25 @@ package spireCafe.interactables.patrons.missingno;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.esotericsoftware.spine.SkeletonMeshRenderer;
+import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
+import com.megacrit.cardcrawl.ui.buttons.ProceedButton;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import spireCafe.patches.CafeEntryExitPatch;
 
 import java.util.ArrayList;
 
@@ -81,6 +88,39 @@ public class MissingnoPatches {
             sb.setShader(null);
             sb.end();
         }
+    }
 
+    @SpirePatch(clz = AbstractRelic.class, method = "renderInTopPanel")
+    public static class MissingnoRelicRender {
+        @SpireInsertPatch(locator = Locator.class)
+        public static void MissingnoRelicPrefixRenderPatch(AbstractRelic __instance, SpriteBatch sb) {
+            if(__instance.relicId.equals(MissingnoRelic.ID)) {
+                glitchShader = initGlitchShader(glitchShader);
+                sb.setShader(glitchShader);
+            }
+        }
+
+        @SpireInsertPatch(locator = LocatorTwo.class)
+        public static void MissingnoRelicInsertPatch(AbstractRelic __instance, SpriteBatch sb) {
+            if(__instance.relicId.equals(MissingnoRelic.ID)) {
+                sb.setShader(null);
+            }
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(SpriteBatch.class, "setColor");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
+        }
+
+        private static class LocatorTwo extends SpireInsertLocator {
+            @Override
+            public int[] Locate(CtBehavior ctMethodToPatch) throws Exception {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(AbstractRelic.class, "renderCounter");
+                return LineFinder.findInOrder(ctMethodToPatch, finalMatcher);
+            }
+        }
     }
 }

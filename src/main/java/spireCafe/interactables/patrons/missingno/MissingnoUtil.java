@@ -1,14 +1,10 @@
 package spireCafe.interactables.patrons.missingno;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 
-import java.nio.charset.StandardCharsets;
-
 import static spireCafe.Anniv7Mod.makeShaderPath;
-import static spireCafe.Anniv7Mod.modID;
 
 public class MissingnoUtil {
     public static boolean isGlitched() {

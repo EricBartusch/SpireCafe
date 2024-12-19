@@ -16,8 +16,11 @@ import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.*;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import imgui.ImGui;
 import imgui.type.ImFloat;
@@ -29,6 +32,7 @@ import spireCafe.abstracts.AbstractSCRelic;
 import spireCafe.cardvars.SecondDamage;
 import spireCafe.cardvars.SecondMagicNumber;
 import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
+import spireCafe.interactables.patrons.missingno.MissingnoRelic;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
 import spireCafe.util.TexLoader;
@@ -42,6 +46,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 
+import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.interactables.patrons.missingno.MissingnoPatches.MISSINGNO_RELIC_LANDING_SFX;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
 
@@ -400,7 +405,9 @@ public class Anniv7Mod implements
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
-        time = time % 100;
+        if(time > 100.0f) {
+            time = 0f;
+        }
     }
 
     private ModPanel settingsPanel;

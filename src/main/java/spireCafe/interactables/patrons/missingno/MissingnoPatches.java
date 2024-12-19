@@ -1,30 +1,34 @@
 package spireCafe.interactables.patrons.missingno;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.math.Interpolation;
 import com.esotericsoftware.spine.SkeletonMeshRenderer;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
+import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import spireCafe.util.TexLoader;
 
 import java.util.ArrayList;
 
 import static spireCafe.Anniv7Mod.*;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.initGlitchShader;
+import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
 
 
 public class MissingnoPatches {
     private static ShaderProgram glitchShader = null;
+    private static final Texture background = TexLoader.getTexture(makeCharacterPath("Missingno/coast.png"));
 
     @SpirePatch(clz = AbstractPlayer.class, method = "renderPlayerImage")
     public static class ApplyPlayerShaders {
@@ -137,5 +141,44 @@ public class MissingnoPatches {
             }
         }
 
+    }
+
+    @SpirePatch(clz = AbstractDungeon.class, method = "render")
+    public static class renderMyBg {
+
+        @SpireInsertPatch(rloc = 11)
+        public static void MissingnoRenderBg(AbstractDungeon __instance, SpriteBatch sb) {
+            if (isGlitched()) {
+                float alpha = getAlpha();
+                Color prevColor = sb.getColor();
+                sb.setColor(1f, 1f, 1f, alpha);
+                sb.setBlendFunction(GL30.GL_SRC_ALPHA, GL30.GL_ONE_MINUS_SRC_ALPHA);
+                sb.draw(background, 0, 0, Settings.WIDTH, Settings.HEIGHT);
+                sb.setColor(prevColor);
+            }
+        }
+
+        private static float getAlpha() {
+            float period = 5.0f;
+            float pauseDuration = 60.0f;
+            float maxAlpha = 0.15f;
+            float totalPeriod = period + pauseDuration;
+            float normalizedTime = time % totalPeriod;
+
+            float alpha;
+            if (normalizedTime < period / 2) {
+                // Fade in
+                float cycleTime = normalizedTime / (period / 2);
+                alpha = Interpolation.linear.apply(0f, maxAlpha, cycleTime);
+            } else if (normalizedTime < period) {
+                // Fade out
+                float cycleTime = (normalizedTime - period / 2) / (period / 2);
+                alpha = Interpolation.linear.apply(maxAlpha, 0f, cycleTime);
+            } else {
+                // Pause
+                alpha = 0.0f;
+            }
+            return alpha;
+        }
     }
 }

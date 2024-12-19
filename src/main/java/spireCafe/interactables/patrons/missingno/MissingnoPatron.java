@@ -14,6 +14,7 @@ import spireCafe.Anniv7Mod;
 import spireCafe.abstracts.AbstractPatron;
 import spireCafe.util.TexLoader;
 
+import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.Anniv7Mod.*;
 import static spireCafe.Anniv7Mod.shake_color_rate;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.initGlitchShader;
@@ -69,5 +70,15 @@ public class MissingnoPatron extends AbstractPatron {
         super.update();
         this.wavyHelper += Gdx.graphics.getDeltaTime() * 2.0F;
         this.wavy_y = MathUtils.sin(this.wavyHelper) * WAVY_DISTANCE;
+
+        if(AbstractDungeon.player != null && AbstractDungeon.player.hasRelic(MissingnoRelic.ID) && time == 0f ) {
+            if(miscRng.randomBoolean()) {
+                if (miscRng.randomBoolean()) {
+                    AbstractDungeon.player.gainGold(1);
+                } else {
+                    AbstractDungeon.player.loseGold(1);
+                }
+            }
+        }
     }
 }

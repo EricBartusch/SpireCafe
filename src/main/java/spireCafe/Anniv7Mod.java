@@ -14,12 +14,14 @@ import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.*;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.FrozenEye;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import imgui.ImGui;
@@ -32,10 +34,12 @@ import spireCafe.abstracts.AbstractSCRelic;
 import spireCafe.cardvars.SecondDamage;
 import spireCafe.cardvars.SecondMagicNumber;
 import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
+import spireCafe.interactables.patrons.missingno.DribbleCardAction;
 import spireCafe.interactables.patrons.missingno.MissingnoRelic;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
 import spireCafe.util.TexLoader;
+import spireCafe.util.Wiz;
 import spireCafe.util.cutsceneStrings.CutsceneStrings;
 import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
 
@@ -49,6 +53,8 @@ import java.util.function.Consumer;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.interactables.patrons.missingno.MissingnoPatches.MISSINGNO_RELIC_LANDING_SFX;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
+import static spireCafe.util.Wiz.atb;
+import static spireCafe.util.Wiz.att;
 
 @SuppressWarnings({"unused"})
 @SpireInitializer
@@ -402,11 +408,21 @@ public class Anniv7Mod implements
     }
 
     public static float time = 0f;
+    private boolean hasDribbled ;
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
-        if(time > 100.0f) {
+        if(time > 10.0f) {
+            hasDribbled = false;
             time = 0f;
+        }
+        if(time > 3.5f && !hasDribbled) {
+            hasDribbled = true; //One attempt per cycle
+            if (Wiz.isInCombat() && AbstractDungeon.player.hasRelic(MissingnoRelic.ID) && miscRng.randomBoolean(33f)) {
+                if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty()) { //Don't be mean, only do this if it won't affect gameplay much
+                    atb(new DrawCardAction(1, new DribbleCardAction()));
+                }
+            }
         }
     }
 

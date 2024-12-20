@@ -13,7 +13,6 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.blue.Defend_Blue;
 import com.megacrit.cardcrawl.cards.blue.Strike_Blue;
-import com.megacrit.cardcrawl.cards.colorless.Madness;
 import com.megacrit.cardcrawl.cards.green.Defend_Green;
 import com.megacrit.cardcrawl.cards.green.Strike_Green;
 import com.megacrit.cardcrawl.cards.purple.Defend_Watcher;
@@ -22,15 +21,15 @@ import com.megacrit.cardcrawl.cards.red.Defend_Red;
 import com.megacrit.cardcrawl.cards.red.Strike_Red;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
-import org.w3c.dom.Text;
 import spireCafe.abstracts.AbstractSCCard;
 import spireCafe.interactables.patrons.missingno.MissingnoCard;
 
 import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.stream.Collectors;
 
-import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 
 public class CardArtRoller {
     public static final String partialHueRodrigues =
@@ -207,7 +206,7 @@ public class CardArtRoller {
                 if (c.reskinInfo(q) != null) {
                     return c.reskinInfo(q);
                 } else {
-                    return new ReskinInfo(q, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.randomBoolean());
+                    return new ReskinInfo(q, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), false);
                 }
             });
             if(c.cardID.equals(MissingnoCard.ID)) {
@@ -242,9 +241,13 @@ public class CardArtRoller {
 
     public static Texture getPortraitTexture(AbstractCard c) {
         ReskinInfo r;
-        if(c.cardID.equals(MissingnoCard.ID)) {
+        if(c.cardID.equals(MissingnoCard.ID)) { // Get a random card for portrait
             Random rng = new Random();
-            r = new ReskinInfo(CardLibrary.getAnyColorCard(AbstractCard.CardRarity.COMMON).cardID, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.randomBoolean());
+            List<AbstractCard> skillCards = CardLibrary.getAllCards().stream()
+                    .filter(card -> AbstractCard.CardType.SKILL.equals(card.type))
+                    .collect(Collectors.toList());
+
+            r = new ReskinInfo(skillCards.get(rng.random(skillCards.size() - 1)).cardID, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), false);
         } else {
             r = infos.get(c.cardID);
         }

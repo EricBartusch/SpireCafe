@@ -17,13 +17,6 @@ public class DribbleCardAction extends AbstractGameAction {
         att(new WaitAction(.1f));
         att(new WaitAction(.1f));
         att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-
-        att(new WaitAction(.1f));
         this.isDone = true;
     }
 }

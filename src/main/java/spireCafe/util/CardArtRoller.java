@@ -13,6 +13,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.blue.Defend_Blue;
 import com.megacrit.cardcrawl.cards.blue.Strike_Blue;
+import com.megacrit.cardcrawl.cards.colorless.Madness;
 import com.megacrit.cardcrawl.cards.green.Defend_Green;
 import com.megacrit.cardcrawl.cards.green.Strike_Green;
 import com.megacrit.cardcrawl.cards.purple.Defend_Watcher;
@@ -21,10 +22,15 @@ import com.megacrit.cardcrawl.cards.red.Defend_Red;
 import com.megacrit.cardcrawl.cards.red.Strike_Red;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.random.Random;
+import org.w3c.dom.Text;
 import spireCafe.abstracts.AbstractSCCard;
+import spireCafe.interactables.patrons.missingno.MissingnoCard;
 
+import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.HashMap;
+
+import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 
 public class CardArtRoller {
     public static final String partialHueRodrigues =
@@ -115,10 +121,15 @@ public class CardArtRoller {
             CardLibrary.LibraryType.CURSE
     };
 
-    public static void computeCard(AbstractSCCard c) {
+    public static void computeCard(AbstractSCCard c, boolean isRandomEveryTime) {
         c.portrait = doneCards.computeIfAbsent(c.cardID, key -> {
             ReskinInfo r = infos.computeIfAbsent(key, key2 -> {
-                Random rng = new Random((long) c.cardID.hashCode());
+                Random rng;
+                if(isRandomEveryTime) {
+                    rng = new Random();
+                } else {
+                    rng = new Random((long) c.cardID.hashCode());
+                }
                 String q;
                 if (c.cardArtCopy() != null) {
                     q = c.cardArtCopy();
@@ -199,6 +210,9 @@ public class CardArtRoller {
                     return new ReskinInfo(q, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.randomBoolean());
                 }
             });
+            if(c.cardID.equals(MissingnoCard.ID)) {
+                infos.remove(MissingnoCard.ID);
+            }
             Color HSLC = new Color(r.H, r.S, r.L, r.C);
             TextureAtlas.AtlasRegion t = CardLibrary.getCard(r.origCardID).portrait;
             t.flip(false, true);
@@ -217,10 +231,23 @@ public class CardArtRoller {
             TextureRegion a = ImageHelper.getBufferTexture(fb);
             return new TextureAtlas.AtlasRegion(a.getTexture(), 0, 0, 250, 190);
         });
+        if(c.cardID.equals(MissingnoCard.ID)) {
+            doneCards.remove(c.cardID);
+        }
+    }
+
+    public static void computeCard(AbstractSCCard c) {
+        computeCard(c, c.cardID.equals(MissingnoCard.ID));
     }
 
     public static Texture getPortraitTexture(AbstractCard c) {
-        ReskinInfo r = infos.get(c.cardID);
+        ReskinInfo r;
+        if(c.cardID.equals(MissingnoCard.ID)) {
+            Random rng = new Random();
+            r = new ReskinInfo(CardLibrary.getAnyColorCard(AbstractCard.CardRarity.COMMON).cardID, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.randomBoolean());
+        } else {
+            r = infos.get(c.cardID);
+        }
         Color HSLC = new Color(r.H, r.S, r.L, r.C);
         TextureAtlas.AtlasRegion t = new TextureAtlas.AtlasRegion(TexLoader.getTexture("images/1024Portraits/" + CardLibrary.getCard(r.origCardID).assetUrl + ".png"), 0, 0, 500, 380);
         t.flip(false, true);

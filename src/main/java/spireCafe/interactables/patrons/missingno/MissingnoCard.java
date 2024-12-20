@@ -4,10 +4,12 @@ import com.evacipated.cardcrawl.mod.stslib.cards.targeting.SelfOrEnemyTargeting;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
+import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import spireCafe.abstracts.AbstractSCCard;
 
 import static spireCafe.Anniv7Mod.makeID;
+import static spireCafe.util.CardArtRoller.computeCard;
 import static spireCafe.util.Wiz.atb;
 
 public class MissingnoCard extends AbstractSCCard {
@@ -19,6 +21,10 @@ public class MissingnoCard extends AbstractSCCard {
         exhaust = true;
         MarkovChain markovChain = new MarkovChain();
         rawDescription = rawDescription + " NL " + markovChain.generateText(5, 15);
+        if (CardLibrary.cards != null && !CardLibrary.cards.isEmpty()) {
+            computeCard(this, true);
+            needsArtRefresh = false;
+        }
         initializeDescription();
     }
 

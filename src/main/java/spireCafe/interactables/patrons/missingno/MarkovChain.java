@@ -36,8 +36,12 @@ public class MarkovChain {
     }
 
     public String generateText() {
+        return generateText(25, 40);
+    }
+
+    public String generateText(int startRange, int endRange) {
         String seed = getRandomSeed();
-        int length = random.nextInt((40 - 25) + 1) + 25;
+        int length = random.nextInt((endRange - startRange) + 1) + startRange;
         StringBuilder result = new StringBuilder(seed);
         String currentWord = seed.toLowerCase();
         for (int i = 0; i < length; i++) {

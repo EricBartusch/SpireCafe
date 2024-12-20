@@ -48,7 +48,7 @@ public class MissingnoRelic extends AbstractSCRelic {
 
     @Override
     public void onPlayCard(AbstractCard c, AbstractMonster m) {
-        if(miscRng.random(100) < 100 ) {
+        if(miscRng.random(100) < 3 ) {
             counter++;
             checkTrigger();
         }
@@ -75,6 +75,13 @@ public class MissingnoRelic extends AbstractSCRelic {
         if(miscRng.random(100) < 3 ) {
             counter++;
             checkTrigger();
+        }
+    }
+
+    @Override
+    public void atTurnStart() {
+        if(miscRng.random(100) < 100 ) {
+            AbstractDungeon.player.drawPile.addToRandomSpot(new MissingnoCard());
         }
     }
 

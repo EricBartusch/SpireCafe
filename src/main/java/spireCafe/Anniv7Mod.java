@@ -52,6 +52,7 @@ import java.util.function.Consumer;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.interactables.patrons.missingno.MissingnoPatches.MISSINGNO_RELIC_LANDING_SFX;
+import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
 import static spireCafe.util.Wiz.atb;
 import static spireCafe.util.Wiz.att;
@@ -418,7 +419,7 @@ public class Anniv7Mod implements
         }
         if(time > 3.5f && !hasDribbled) {
             hasDribbled = true; //One attempt per cycle
-            if (Wiz.isInCombat() && AbstractDungeon.player.hasRelic(MissingnoRelic.ID) && miscRng.randomBoolean(33f)) {
+            if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
                 if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty()) { //Don't be mean, only do this if it won't affect gameplay much
                     atb(new DrawCardAction(1, new DribbleCardAction()));
                 }

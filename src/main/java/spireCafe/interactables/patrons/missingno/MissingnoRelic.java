@@ -80,7 +80,7 @@ public class MissingnoRelic extends AbstractSCRelic {
 
     @Override
     public void atTurnStart() {
-        if(miscRng.random(100) < 100 ) {
+        if(miscRng.random(100) < 5 ) {
             AbstractDungeon.player.drawPile.addToRandomSpot(new MissingnoCard());
         }
     }

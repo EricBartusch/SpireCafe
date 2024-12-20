@@ -20,7 +20,8 @@ public class MissingnoCard extends AbstractSCCard {
         super(ID, 0, CardType.SKILL, CardRarity.SPECIAL, SelfOrEnemyTargeting.SELF_OR_ENEMY);
         exhaust = true;
         MarkovChain markovChain = new MarkovChain();
-        rawDescription = rawDescription + " NL " + markovChain.generateText(5, 15);
+        String markovText = markovChain.generateText(5, 15).replaceAll("[~@]", "").replaceAll("#.", "");
+        rawDescription = rawDescription + " NL " + markovText;
         if (CardLibrary.cards != null && !CardLibrary.cards.isEmpty()) {
             computeCard(this, true);
             needsArtRefresh = false;

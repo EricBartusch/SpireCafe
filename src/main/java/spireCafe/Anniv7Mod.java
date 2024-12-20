@@ -420,7 +420,7 @@ public class Anniv7Mod implements
         if(time > 3.5f && !hasDribbled) {
             hasDribbled = true; //One attempt per cycle
             if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
-                if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty()) { //Don't be mean, only do this if it won't affect gameplay much
+                if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty() && AbstractDungeon.player.hand.size() != BaseMod.MAX_HAND_SIZE) { //Don't be mean, only do this if it won't affect gameplay much
                     atb(new DrawCardAction(1, new DribbleCardAction()));
                 }
             }

@@ -11,5 +11,10 @@
     "TEXT": [
       "Return"
     ]
+  },
+  "${ModID}:Missingno": {
+    "TEXT": [
+      "The Missingno"
+    ]
   }
 }

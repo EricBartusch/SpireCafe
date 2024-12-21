@@ -14,13 +14,19 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.ui.panels.TopPanel;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import spireCafe.Anniv7Mod;
 import spireCafe.util.TexLoader;
 
+import javax.smartcardio.Card;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static spireCafe.Anniv7Mod.*;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.initGlitchShader;
@@ -210,13 +216,12 @@ public class MissingnoPatches {
                 return SpireReturn.Continue();
             }
         }
-
     }
 
     @SpirePatch(clz = AbstractDungeon.class, method = "render")
     public static class renderMyBg {
 
-        @SpireInsertPatch(rloc = 11)
+        @SpireInsertPatch(rloc = 11) //I'm not smart enough
         public static void MissingnoRenderBg(AbstractDungeon __instance, SpriteBatch sb) {
             if (isGlitched()) {
                 float alpha = getAlpha();
@@ -251,4 +256,39 @@ public class MissingnoPatches {
             return alpha;
         }
     }
+
+    @SpirePatch(clz = TopPanel.class, method = "setPlayerName")
+    public static class ReplaceName {
+
+        private static final UIStrings uiStrings = CardCrawlGame.languagePack.getUIString(Anniv7Mod.makeID("Missingno"));
+
+        @SpireInsertPatch(locator = ReplaceName.Locator.class, localvars = {"title"} )
+        public static void replaceName(TopPanel __instance, @ByRef String[] ___name, @ByRef String[] ___title) {
+            if(MissingnoUtil.isGlitched()) {
+                ___name[0] = jumbleName();
+                ___title[0] = uiStrings.TEXT[0];
+            }
+        }
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.FieldAccessMatcher(TopPanel.class, "titleX");
+                return LineFinder.findInOrder(ctMethodToPatch, new ArrayList<Matcher>(), finalMatcher);
+            }
+        }
+
+        private static String jumbleName() {
+            List<Character> characters = new ArrayList<>();
+            for (char c : AbstractDungeon.player.name.toCharArray()) {
+                characters.add(c);
+            }
+            Collections.shuffle(characters);
+            StringBuilder sb = new StringBuilder();
+            for (char c : characters) {
+                sb.append(c);
+            }
+            return sb.toString();
+        }
+    }
+
 }

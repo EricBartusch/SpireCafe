@@ -15,7 +15,7 @@ public class MissingnoUtil {
     }
 
     public static boolean isMonsterGlitched(AbstractMonster m) {
-        return MissingnoPatches.GlitchedFields.isGlitched.get(m);
+        return MissingnoPatches.GlitchedMonsterFields.isGlitched.get(m);
     }
 
     public static ShaderProgram initGlitchShader(ShaderProgram glitchShader) {

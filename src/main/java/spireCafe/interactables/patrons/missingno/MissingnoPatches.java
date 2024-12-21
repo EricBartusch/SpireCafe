@@ -23,7 +23,6 @@ import javassist.CtBehavior;
 import spireCafe.Anniv7Mod;
 import spireCafe.util.TexLoader;
 
-import javax.smartcardio.Card;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -84,7 +83,7 @@ public class MissingnoPatches {
                 glitchShader = initGlitchShader(glitchShader);
                 sb.begin();
                 sb.setShader(glitchShader);
-                glitchShader.setUniformf("u_time", (time % 10) + 200);
+                glitchShader.setUniformf("u_time", (time % 10) + GlitchedPlayerFields.glitchOffset.get(__instance));
                 glitchShader.setUniformf("u_shake_power", shake_power.get());
                 glitchShader.setUniformf("u_shake_rate", shake_rate.get());
                 glitchShader.setUniformf("u_shake_speed", shake_speed.get());
@@ -99,8 +98,15 @@ public class MissingnoPatches {
         }
     }
 
+    @SpirePatch(clz = AbstractPlayer.class, method = SpirePatch.CLASS)
+    public static class GlitchedPlayerFields
+    {
+        public static SpireField<Integer> glitchOffset = new SpireField<>(() -> 200);
+
+    }
+
     @SpirePatch(clz = AbstractMonster.class, method = SpirePatch.CLASS)
-    public static class GlitchedFields
+    public static class GlitchedMonsterFields
     {
         public static SpireField<Boolean> isGlitched = new SpireField<>(() -> false);
         public static SpireField<Integer> glitchOffset = new SpireField<>(() -> 200);
@@ -154,7 +160,7 @@ public class MissingnoPatches {
                 glitchShader = initGlitchShader(glitchShader);
                 sb.begin();
                 sb.setShader(glitchShader);
-                glitchShader.setUniformf("u_time", (time % 10) + GlitchedFields.glitchOffset.get(__instance));
+                glitchShader.setUniformf("u_time", (time % 10) + GlitchedMonsterFields.glitchOffset.get(__instance));
                 glitchShader.setUniformf("u_shake_power", shake_power.get());
                 glitchShader.setUniformf("u_shake_rate", shake_rate.get());
                 glitchShader.setUniformf("u_shake_speed", shake_speed.get());

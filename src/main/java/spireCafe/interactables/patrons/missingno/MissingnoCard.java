@@ -3,10 +3,8 @@ package spireCafe.interactables.patrons.missingno;
 import com.evacipated.cardcrawl.mod.stslib.cards.targeting.SelfOrEnemyTargeting;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
-import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
-import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import spireCafe.abstracts.AbstractSCCard;
@@ -51,8 +49,11 @@ public class MissingnoCard extends AbstractSCCard {
         atb(new DrawCardAction(1));
 
         if(target instanceof AbstractMonster) {
-            MissingnoPatches.GlitchedFields.isGlitched.set(target, true);
-            MissingnoPatches.GlitchedFields.glitchOffset.set(target, random.nextInt(200));
+            MissingnoPatches.GlitchedMonsterFields.isGlitched.set(target, true);
+            MissingnoPatches.GlitchedMonsterFields.glitchOffset.set(target, random.nextInt(200));
+        } else {
+            MissingnoPatches.GlitchedPlayerFields.glitchOffset.set(target, MissingnoPatches.GlitchedPlayerFields.glitchOffset.get(abstractPlayer) + random.nextInt(100));
+
         }
     }
 }

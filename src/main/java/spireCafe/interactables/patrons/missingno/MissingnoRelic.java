@@ -156,4 +156,9 @@ public class MissingnoRelic extends AbstractSCRelic {
             checkTrigger();
         }
     }
+
+    @Override
+    public void onVictory() {
+        MissingnoPatches.GlitchedPlayerFields.glitchOffset.set(AbstractDungeon.player, 200);
+    }
 }

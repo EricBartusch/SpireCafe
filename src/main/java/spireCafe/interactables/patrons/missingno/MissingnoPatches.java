@@ -14,6 +14,7 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
@@ -92,6 +93,75 @@ public class MissingnoPatches {
         }
     }
 
+    @SpirePatch(clz = AbstractMonster.class, method = SpirePatch.CLASS)
+    public static class GlitchedFields
+    {
+        public static SpireField<Boolean> isGlitched = new SpireField<>(() -> false);
+        public static SpireField<Integer> glitchOffset = new SpireField<>(() -> 200);
+
+    }
+
+    @SpirePatch(clz = AbstractMonster.class, method = "render")
+    public static class ApplyMonsterShaders {
+        private static FrameBuffer buffer;
+        private static TextureRegion monsterTexture;
+
+        private static class Locator extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(SkeletonMeshRenderer.class, "draw");
+                return LineFinder.findInOrder(ctMethodToPatch, new ArrayList<Matcher>(), finalMatcher);
+            }
+        }
+
+        @SpireInsertPatch(locator = Locator.class)
+        public static void startBuffer(AbstractMonster __instance, SpriteBatch sb) {
+            if(MissingnoUtil.isMonsterGlitched(__instance)) {
+                sb.flush();
+                if (buffer == null) {
+                    buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
+                }
+                buffer.begin();
+                Gdx.gl.glClearColor(0.0F, 0.0F, 0.0F, 0.0F);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+                Gdx.gl.glColorMask(true, true, true, true);
+            }
+        }
+
+        private static class LocatorTwo extends SpireInsertLocator {
+            public int[] Locate(CtBehavior ctMethodToPatch) throws CannotCompileException, PatchingException {
+                Matcher finalMatcher = new Matcher.MethodCallMatcher(SpriteBatch.class, "begin");
+                return LineFinder.findInOrder(ctMethodToPatch, new ArrayList<Matcher>(), finalMatcher);
+            }
+        }
+
+        @SpireInsertPatch(locator = LocatorTwo.class)
+        public static void endBufferAndDraw(AbstractMonster __instance, SpriteBatch sb) {
+            if(MissingnoUtil.isMonsterGlitched(__instance)) {
+                sb.flush();
+                buffer.end();
+                if (monsterTexture == null) {
+                    monsterTexture = new TextureRegion(buffer.getColorBufferTexture());
+                    monsterTexture.flip(false, true);
+                } else {
+                    monsterTexture.setTexture(buffer.getColorBufferTexture());
+                }
+                glitchShader = initGlitchShader(glitchShader);
+                sb.begin();
+                sb.setShader(glitchShader);
+                glitchShader.setUniformf("u_time", (time % 10) + GlitchedFields.glitchOffset.get(__instance));
+                glitchShader.setUniformf("u_shake_power", shake_power.get());
+                glitchShader.setUniformf("u_shake_rate", shake_rate.get());
+                glitchShader.setUniformf("u_shake_speed", shake_speed.get());
+                glitchShader.setUniformf("u_shake_block_size", shake_block_size.get());
+                glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
+
+
+                sb.draw(monsterTexture, -Settings.VERT_LETTERBOX_AMT, -Settings.HORIZ_LETTERBOX_AMT);
+                sb.setShader(null);
+                sb.end();
+            }
+        }
+    }
     @SpirePatch(clz = AbstractRelic.class, method = "renderInTopPanel")
     public static class MissingnoRelicRender {
         @SpireInsertPatch(locator = Locator.class)

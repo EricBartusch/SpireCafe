@@ -9,20 +9,38 @@ import java.util.*;
 import static spireCafe.Anniv7Mod.modID;
 
 public class MarkovChain {
-    private Map<String, List<String>> markovChain = new HashMap<>();
-    private Random random = new Random();
+    private static final Map<MarkovType, MarkovChain> instances = new HashMap<>();
+    private final Map<String, List<String>> markovChain = new HashMap<>();
+    private final Random random = new Random();
 
-    public MarkovChain() {
-        FileHandle fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
+    private MarkovChain(MarkovType type) {
+        FileHandle fileHandle;
+        switch(type) {
+            case CARD:
+                fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-cards.txt");
+                break;
+            case RELIC:
+                fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-relics.txt");
+                break;
+            case FLAVOR:
+                fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-relic-flavors.txt");
+                break;
+            default:
+                fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
+        }
         String text = fileHandle.readString(String.valueOf(StandardCharsets.UTF_8));
         buildChain(text);
+    }
+
+    public static MarkovChain getInstance(MarkovType type) {
+        return instances.computeIfAbsent(type, MarkovChain::new);
     }
 
     public void buildChain(String text) {
         String[] words = text.split("\\s+");
         for (int i = 0; i < words.length - 1; i++) {
-            String word = words[i].toLowerCase();
-            String nextWord = words[i + 1].toLowerCase();
+            String word = words[i];
+            String nextWord = words[i + 1];
             markovChain.computeIfAbsent(word, k -> new ArrayList<>()).add(nextWord);
         }
     }
@@ -30,7 +48,7 @@ public class MarkovChain {
     private String getRandomSeed() {
         List<String> keys = new ArrayList<>(markovChain.keySet());
         if (keys.isEmpty()) {
-            return ""; // If no keys are present, return an empty string
+            return "";
         }
         return keys.get(random.nextInt(keys.size()));
     }
@@ -56,4 +74,11 @@ public class MarkovChain {
         return result.toString();
     }
 
+    public enum MarkovType {
+        MISSINGNO,
+        CARD,
+        RELIC,
+        FLAVOR,
+        BOOK
+    }
 }

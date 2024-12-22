@@ -5,7 +5,13 @@ import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static spireCafe.Anniv7Mod.makeShaderPath;
 
@@ -37,5 +43,36 @@ public class MissingnoUtil {
             }
         }
         return glitchShader;
+    }
+
+    public static void shuffleRelics() {
+        if(CardCrawlGame.isInARun()) {
+            ArrayList<AbstractRelic> relics = AbstractDungeon.player.relics;
+            if (relics.size() <= 1) {
+                return;
+            }
+            List<AbstractRelic> relicSublist = new ArrayList<>(relics.subList(1, relics.size()));
+            Collections.shuffle(relicSublist);
+
+            List<Float> currentXList = new ArrayList<>();
+            List<Float> targetXList = new ArrayList<>();
+            List<Hitbox> hitboxList = new ArrayList<>();
+
+            for (int i = 1; i < relics.size(); i++) {
+                currentXList.add(relics.get(i).currentX);
+                targetXList.add(relics.get(i).targetX);
+                hitboxList.add(relics.get(i).hb);
+            }
+
+            for (int i = 1; i < relics.size(); i++) {
+                AbstractRelic newRelic = relicSublist.get(i - 1);
+
+                relics.set(i, newRelic);
+
+                newRelic.currentX = currentXList.get(i - 1);
+                newRelic.targetX = targetXList.get(i - 1);
+                newRelic.hb = hitboxList.get(i - 1);
+            }
+        }
     }
 }

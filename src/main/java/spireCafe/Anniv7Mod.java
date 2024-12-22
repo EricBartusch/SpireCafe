@@ -36,6 +36,7 @@ import spireCafe.cardvars.SecondMagicNumber;
 import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
 import spireCafe.interactables.patrons.missingno.DribbleCardAction;
 import spireCafe.interactables.patrons.missingno.MissingnoRelic;
+import spireCafe.interactables.patrons.missingno.MissingnoUtil;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
 import spireCafe.util.TexLoader;
@@ -411,12 +412,14 @@ public class Anniv7Mod implements
     public static float time = 0f;
     private boolean hasDribbled ;
     private boolean hasNameChanged;
+    private boolean hasShuffledRelics;
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
         if(time > 10.0f) {
             hasDribbled = false;
             hasNameChanged = false;
+            hasShuffledRelics = false;
             time = 0f;
         }
         if(time > 3.5f && !hasDribbled) {
@@ -433,6 +436,11 @@ public class Anniv7Mod implements
                 AbstractDungeon.topPanel.setPlayerName();
                 hasNameChanged = true;
             }
+        }
+
+        if(time > 8.0f && !hasShuffledRelics) {
+            MissingnoUtil.shuffleRelics();
+            hasShuffledRelics = true;
         }
     }
 

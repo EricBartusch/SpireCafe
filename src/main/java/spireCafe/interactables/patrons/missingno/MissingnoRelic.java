@@ -10,17 +10,23 @@ import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.cards.DamageInfo;
 import com.megacrit.cardcrawl.core.AbstractCreature;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.orbs.AbstractOrb;
+import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.FrozenEye;
 import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.ui.campfire.AbstractCampfireOption;
 import spireCafe.abstracts.AbstractSCRelic;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.Anniv7Mod.makeID;
+import static spireCafe.interactables.patrons.missingno.MarkovChain.MarkovType.FLAVOR;
+import static spireCafe.interactables.patrons.missingno.MarkovChain.MarkovType.RELIC;
 import static spireCafe.interactables.patrons.missingno.MissingnoPatron.assetID;
 import static spireCafe.util.Wiz.atb;
 
@@ -32,6 +38,12 @@ public class MissingnoRelic extends AbstractSCRelic {
     public MissingnoRelic() {
         super(ID, assetID, RelicTier.SPECIAL, LandingSound.HEAVY);
         this.counter = 0;
+        flavorText = MarkovChain.getInstance(FLAVOR).generateText(5, 15);
+    }
+
+    @Override
+    public String getUpdatedDescription() {
+        return MarkovChain.getInstance(RELIC).generateText(5, 15);
     }
 
     @Override

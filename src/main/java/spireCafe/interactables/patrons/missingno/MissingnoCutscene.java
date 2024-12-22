@@ -17,18 +17,17 @@ import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
 
 import static spireCafe.Anniv7Mod.makeID;
 import static spireCafe.Anniv7Mod.modID;
+import static spireCafe.interactables.patrons.missingno.MarkovChain.MarkovType.MISSINGNO;
 
 
 public class MissingnoCutscene extends AbstractCutscene {
     public static final String ID = makeID(MissingnoCutscene.class.getSimpleName());
     private static final CutsceneStrings cutsceneStrings = LocalizedCutsceneStrings.getCutsceneStrings(ID);
     public static BitmapFont font;
-    private final MarkovChain missingnoChain;
     private static final FileHandle FONT_FILE = Gdx.files.internal(modID + "Resources/fonts/missingno/Gridlockd.ttf");
 
     public MissingnoCutscene(AbstractNPC character) {
         super(character, cutsceneStrings);
-        missingnoChain = new MarkovChain();
         if (font == null) {
             setupFont();
         }
@@ -66,7 +65,7 @@ public class MissingnoCutscene extends AbstractCutscene {
 
     @Override
     protected void updateDialogueText() {
-        String text = missingnoChain.generateText();
+        String text = MarkovChain.getInstance(MISSINGNO).generateText();
         if(dialogueIndex == 0) {
             String speakerName = FontHelper.colorString(character.name, "y") + " NL ";
             text = speakerName + text;
@@ -84,7 +83,7 @@ public class MissingnoCutscene extends AbstractCutscene {
 
     @Override
     public String getBlockingDialogue() {
-        String text = missingnoChain.generateText();
+        String text = MarkovChain.getInstance(MISSINGNO).generateText();
         String speakerName = FontHelper.colorString(character.name, "y") + " NL ";
         return speakerName + text;
     }

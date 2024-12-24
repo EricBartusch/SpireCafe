@@ -28,8 +28,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static spireCafe.Anniv7Mod.*;
-import static spireCafe.interactables.patrons.missingno.MissingnoUtil.initGlitchShader;
-import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
+import static spireCafe.interactables.patrons.missingno.MissingnoUtil.*;
 
 
 public class MissingnoPatches {
@@ -208,7 +207,16 @@ public class MissingnoPatches {
         }
     }
 
-    public static final String MISSINGNO_RELIC_LANDING_SFX = makeID("MissingnoRelic");
+    public static final String POKE1 = makeID("Poke1");
+    public static final String POKE2 = makeID("Poke2");
+    public static final String POKE3 = makeID("Poke3");
+    public static final String POKE4 = makeID("Poke4");
+    public static final String POKE5 = makeID("Poke5");
+    public static final String POKE6 = makeID("Poke6");
+    public static final String POKE7 = makeID("Poke7");
+    public static final String POKE8 = makeID("Poke8");
+    public static final String POKE9 = makeID("Poke9");
+
 
     @SpirePatch(clz = AbstractRelic.class, method = "playLandingSFX")
     public static class PlayMissingnoSoundPatch {
@@ -216,7 +224,7 @@ public class MissingnoPatches {
         @SpirePrefixPatch
         public static SpireReturn<Void> PlaySound(AbstractRelic __instance) {
             if(__instance.relicId.equals(MissingnoRelic.ID)) {
-                CardCrawlGame.sound.play(MISSINGNO_RELIC_LANDING_SFX);
+                CardCrawlGame.sound.play(getRandomPokeSFX());
                 return SpireReturn.Return();
             } else {
                 return SpireReturn.Continue();

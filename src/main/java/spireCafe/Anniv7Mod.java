@@ -20,9 +20,7 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.relics.AbstractRelic;
 import com.megacrit.cardcrawl.relics.FrozenEye;
-import com.megacrit.cardcrawl.rooms.AbstractRoom;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import imgui.ImGui;
 import imgui.type.ImFloat;
@@ -35,7 +33,6 @@ import spireCafe.cardvars.SecondDamage;
 import spireCafe.cardvars.SecondMagicNumber;
 import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
 import spireCafe.interactables.patrons.missingno.DribbleCardAction;
-import spireCafe.interactables.patrons.missingno.MissingnoRelic;
 import spireCafe.interactables.patrons.missingno.MissingnoUtil;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
@@ -52,11 +49,11 @@ import java.util.*;
 import java.util.function.Consumer;
 
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
-import static spireCafe.interactables.patrons.missingno.MissingnoPatches.MISSINGNO_RELIC_LANDING_SFX;
+import static spireCafe.interactables.patrons.missingno.MissingnoPatches.*;
+import static spireCafe.interactables.patrons.missingno.MissingnoUtil.getRandomPokeSFX;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
 import static spireCafe.util.Wiz.atb;
-import static spireCafe.util.Wiz.att;
 
 @SuppressWarnings({"unused"})
 @SpireInitializer
@@ -405,7 +402,18 @@ public class Anniv7Mod implements
     @Override
     public void receiveAddAudio() {
         BaseMod.addAudio(CAFE_ENTRY_SOUND_KEY, makePath("audio/cafe_entry_door_chime.mp3"));
-        BaseMod.addAudio(MISSINGNO_RELIC_LANDING_SFX, makePath("audio/missingno_relic_landing_sfx.mp3"));
+        BaseMod.addAudio(POKE1, makePath("audio/poke1.mp3"));
+        BaseMod.addAudio(POKE2, makePath("audio/poke2.mp3"));
+        BaseMod.addAudio(POKE3, makePath("audio/poke3.mp3"));
+        BaseMod.addAudio(POKE4, makePath("audio/poke4.mp3"));
+        BaseMod.addAudio(POKE5, makePath("audio/poke5.mp3"));
+        BaseMod.addAudio(POKE6, makePath("audio/poke6.mp3"));
+        BaseMod.addAudio(POKE7, makePath("audio/poke7.mp3"));
+        BaseMod.addAudio(POKE8, makePath("audio/poke8.mp3"));
+        BaseMod.addAudio(POKE9, makePath("audio/poke9.mp3"));
+
+
+
 
     }
 
@@ -413,6 +421,7 @@ public class Anniv7Mod implements
     private boolean hasDribbled ;
     private boolean hasNameChanged;
     private boolean hasShuffledRelics;
+    private boolean hasPlayedSfx;
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
@@ -420,6 +429,7 @@ public class Anniv7Mod implements
             hasDribbled = false;
             hasNameChanged = false;
             hasShuffledRelics = false;
+            hasPlayedSfx = false;
             time = 0f;
         }
         if(time > 3.5f && !hasDribbled) {
@@ -432,15 +442,22 @@ public class Anniv7Mod implements
         }
 
         if(time > 6.0f && !hasNameChanged) {
+            hasNameChanged = true;
             if(isGlitched() && Wiz.isInCombat() && miscRng.randomBoolean(.33f)) {
                 AbstractDungeon.topPanel.setPlayerName();
-                hasNameChanged = true;
             }
         }
 
         if(time > 8.0f && !hasShuffledRelics) {
             MissingnoUtil.shuffleRelics();
             hasShuffledRelics = true;
+        }
+
+        if(time > 2.0f && !hasPlayedSfx) {
+            hasPlayedSfx = true;
+            if(isGlitched() && miscRng.randomBoolean(.05f)) {
+                CardCrawlGame.sound.play(getRandomPokeSFX());
+            }
         }
     }
 

@@ -12,11 +12,13 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.combat.*;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.lang.reflect.Constructor;
+import java.util.*;
 
+import static com.badlogic.gdx.math.MathUtils.random;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.Anniv7Mod.makeID;
 import static spireCafe.Anniv7Mod.makeShaderPath;
@@ -104,6 +106,86 @@ public class MissingnoUtil {
     }
 
     public static String getRandomPokeSFX() {
-        return makeID("Poke") + miscRng.random(1, 10);
+        return makeID("Poke") + (random.nextInt(9) + 1);
+    }
+
+    private static final List<Class<? extends AbstractGameEffect>> effectClasses = Arrays.asList(
+            BiteEffect.class,
+            ClashEffect.class,
+            EmptyStanceEffect.class,
+            EntangleEffect.class,
+            ExplosionSmallEffect.class,
+            FireballEffect.class,
+            FlameBarrierEffect.class,
+            FlickCoinEffect.class,
+            GhostIgniteEffect.class,
+            HeartBuffEffect.class,
+            HemokinesisEffect.class,
+            IceShatterEffect.class,
+            LightningEffect.class,
+            OmegaFlashEffect.class,
+            PotionBounceEffect.class,
+            PressurePointEffect.class,
+            SanctityEffect.class,
+            ScrapeEffect.class,
+            SmallLaserEffect.class,
+            StunStarEffect.class,
+            ThirdEyeEffect.class,
+            ViceCrushEffect.class,
+            WaterDropEffect.class,
+            WeightyImpactEffect.class,
+            WebParticleEffect.class
+    );
+
+    public static AbstractGameEffect getRandomEffect(float x, float y) {
+        int index = random.nextInt(effectClasses.size());
+        Class<? extends AbstractGameEffect> chosenClass = effectClasses.get(index);
+
+        try {
+            Constructor<? extends AbstractGameEffect> constructor = findSuitableConstructor(chosenClass);
+            if (constructor.getParameterCount() == 4) {
+                return constructor.newInstance(AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY, x, y);
+            } else {
+                return constructor.newInstance(x, y);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static Constructor<? extends AbstractGameEffect> findSuitableConstructor(Class<? extends AbstractGameEffect> clazz) throws NoSuchMethodException {
+        Constructor<?>[] constructors = clazz.getConstructors();
+        for (Constructor<?> constructor : constructors) {
+            Class<?>[] parameterTypes = constructor.getParameterTypes();
+            if (parameterTypes.length == 2 && parameterTypes[0] == float.class && parameterTypes[1] == float.class) {
+                return (Constructor<? extends AbstractGameEffect>) constructor;
+            } else if (parameterTypes.length == 4 &&
+                    parameterTypes[0] == float.class && parameterTypes[1] == float.class &&
+                    parameterTypes[2] == float.class && parameterTypes[3] == float.class) {
+                return (Constructor<? extends AbstractGameEffect>) constructor;
+            }
+        }
+        throw new NoSuchMethodException("No suitable constructor found for class: " + clazz.getName());
+    }
+
+    public static List<AbstractGameEffect> getAllEffects(float x, float y) {
+        List<AbstractGameEffect> effects = new ArrayList<>();
+        for (Class<? extends AbstractGameEffect> effectClass : effectClasses) {
+            try {
+                Constructor<? extends AbstractGameEffect> constructor = findSuitableConstructor(effectClass);
+                AbstractGameEffect effect;
+                if (constructor.getParameterCount() == 4) {
+                    effect = constructor.newInstance(AbstractDungeon.player.hb.cX, AbstractDungeon.player.hb.cY, x, y);
+                } else {
+                    effect = constructor.newInstance(x, y);
+                }
+                effects.add(effect);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        return effects;
     }
 }

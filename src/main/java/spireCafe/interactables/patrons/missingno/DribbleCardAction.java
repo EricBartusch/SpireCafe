@@ -12,11 +12,13 @@ public class DribbleCardAction extends AbstractGameAction {
 
     @Override
     public void update() {
-        att(new MoveCardToDeckAction(DrawCardAction.drawnCards.get(0)));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
-        att(new WaitAction(.1f));
+        if(!DrawCardAction.drawnCards.isEmpty()) {
+            att(new MoveCardToDeckAction(DrawCardAction.drawnCards.get(0)));
+            att(new WaitAction(.1f));
+            att(new WaitAction(.1f));
+            att(new WaitAction(.1f));
+            att(new WaitAction(.1f));
+        }
         this.isDone = true;
     }
 }

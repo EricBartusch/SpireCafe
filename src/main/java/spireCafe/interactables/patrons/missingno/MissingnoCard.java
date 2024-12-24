@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.BufferUtils;
 import com.evacipated.cardcrawl.mod.stslib.cards.targeting.SelfOrEnemyTargeting;
 import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
+import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
@@ -21,12 +22,15 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
+import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
+import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import spireCafe.abstracts.AbstractSCCard;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
+import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static spireCafe.Anniv7Mod.*;
@@ -68,7 +72,6 @@ public class MissingnoCard extends AbstractSCCard {
     @Override
     public void use(AbstractPlayer abstractPlayer, AbstractMonster abstractMonster) {
         AbstractCreature target = SelfOrEnemyTargeting.getTarget(this);
-        atb(new SFXAction(getRandomPokeSFX())); //TODO: random real sounds
         atb(new DrawCardAction(1));
 
         if(target instanceof AbstractMonster) {
@@ -76,8 +79,8 @@ public class MissingnoCard extends AbstractSCCard {
             MissingnoPatches.GlitchedMonsterFields.glitchOffset.set(target, random.nextInt(200));
         } else {
             MissingnoPatches.GlitchedPlayerFields.glitchOffset.set(target, MissingnoPatches.GlitchedPlayerFields.glitchOffset.get(abstractPlayer) + random.nextInt(100));
-
         }
+        atb(new VFXAction(MissingnoUtil.getRandomEffect(target.hb.cX, target.hb.cY)));
     }
     @SpirePatch(clz = AbstractCard.class, method = "render", paramtypez = SpriteBatch.class)
     public static class GlitchCardPatches {

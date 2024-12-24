@@ -14,9 +14,11 @@ import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
+import com.megacrit.cardcrawl.helpers.RelicLibrary;
 import com.megacrit.cardcrawl.localization.UIStrings;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.screens.compendium.RelicViewScreen;
 import com.megacrit.cardcrawl.ui.panels.TopPanel;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
@@ -305,4 +307,14 @@ public class MissingnoPatches {
         }
     }
 
+    @SpirePatch(clz = RelicViewScreen.class, method = "update")
+    public static class ShuffleSpecialRelics {
+
+        @SpirePostfixPatch
+        public static void AtTheEnd() {
+            if(time > 9.8) {
+                Collections.shuffle(RelicLibrary.specialList);
+            }
+        }
+    }
 }

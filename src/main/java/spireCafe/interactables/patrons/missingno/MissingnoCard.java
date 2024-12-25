@@ -23,6 +23,7 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
+import spireCafe.Anniv7Mod;
 import spireCafe.abstracts.AbstractSCCard;
 
 import java.nio.IntBuffer;
@@ -88,7 +89,7 @@ public class MissingnoCard extends AbstractSCCard {
                 glitchShader = MissingnoUtil.initGlitchShader(glitchShader);
             }
             if (!Settings.hideCards) {
-                if (__instance.cardID.equals(MissingnoCard.ID)) {
+                if (__instance.cardID.equals(MissingnoCard.ID) && !Anniv7Mod.getDisableShadersConfig()) {
                     TextureRegion t = cardToTextureRegion(__instance, spriteBatch);
                     spriteBatch.setBlendFunction(GL20.GL_ONE, GL20.GL_ONE_MINUS_SRC_ALPHA);
                     ShaderProgram oldShader = spriteBatch.getShader();
@@ -143,7 +144,7 @@ public class MissingnoCard extends AbstractSCCard {
                 glitchShader = MissingnoUtil.initGlitchShader(glitchShader);
             }
             AbstractCard card = ReflectionHacks.getPrivate(__instance, SingleCardViewPopup.class, "card");
-            if (card.cardID.equals(MissingnoCard.ID)) {
+            if (card.cardID.equals(MissingnoCard.ID) && !getDisableShadersConfig()) {
                 oldShader = sb.getShader();
                 sb.setShader(glitchShader);
                 glitchShader.setUniformf("u_time", (time % 10) + random.nextInt(5));

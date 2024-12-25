@@ -51,18 +51,20 @@ public class MissingnoPatron extends AbstractPatron {
         if(shouldShowSpeechBubble) {
             this.speechBubble.render(sb);
         }
-        sb.setColor(Color.WHITE);
-        glitchShader = initGlitchShader(glitchShader);
-        sb.setShader(glitchShader);
-        glitchShader.setUniformf("u_time", (time % 10) + 200);
-        glitchShader.setUniformf("u_shake_power", shake_power.get());
-        glitchShader.setUniformf("u_shake_rate", shake_rate.get());
-        glitchShader.setUniformf("u_shake_speed", shake_speed.get());
-        glitchShader.setUniformf("u_shake_block_size", shake_block_size.get());
-        glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
-        sb.draw(this.img, this.animationX - (float)this.img.getWidth() * Settings.scale / 2.0F, this.animationY  + this.wavy_y, (float)this.img.getWidth() * Settings.scale, (float)this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
-        sb.setShader(null);
-        this.hitbox.render(sb);
+        if(!Anniv7Mod.getDisableShadersConfig()) {
+            sb.setColor(Color.WHITE);
+            glitchShader = initGlitchShader(glitchShader);
+            sb.setShader(glitchShader);
+            glitchShader.setUniformf("u_time", (time % 10) + 200);
+            glitchShader.setUniformf("u_shake_power", shake_power.get());
+            glitchShader.setUniformf("u_shake_rate", shake_rate.get());
+            glitchShader.setUniformf("u_shake_speed", shake_speed.get());
+            glitchShader.setUniformf("u_shake_block_size", shake_block_size.get());
+            glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
+            sb.draw(this.img, this.animationX - (float) this.img.getWidth() * Settings.scale / 2.0F, this.animationY + this.wavy_y, (float) this.img.getWidth() * Settings.scale, (float) this.img.getHeight() * Settings.scale, 0, 0, this.img.getWidth(), this.img.getHeight(), this.flipHorizontal, this.flipVertical);
+            sb.setShader(null);
+            this.hitbox.render(sb);
+        }
     }
 
     @Override

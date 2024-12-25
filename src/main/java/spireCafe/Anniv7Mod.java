@@ -15,13 +15,10 @@ import com.evacipated.cardcrawl.modthespire.Loader;
 import com.evacipated.cardcrawl.modthespire.lib.SpireConfig;
 import com.evacipated.cardcrawl.modthespire.lib.SpireInitializer;
 import com.google.gson.Gson;
-import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.localization.*;
-import com.megacrit.cardcrawl.relics.FrozenEye;
 import com.megacrit.cardcrawl.unlock.UnlockTracker;
 import imgui.ImGui;
 import imgui.type.ImFloat;
@@ -32,14 +29,11 @@ import spireCafe.abstracts.AbstractCafeInteractable;
 import spireCafe.abstracts.AbstractSCRelic;
 import spireCafe.cardvars.SecondDamage;
 import spireCafe.cardvars.SecondMagicNumber;
-import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
-import spireCafe.interactables.patrons.missingno.DribbleCardAction;
-import spireCafe.interactables.patrons.missingno.MissingnoUtil;
 import spireCafe.interactables.attractions.makeup.MakeupTableAttraction;
+import spireCafe.interactables.patrons.missingno.MissingnoUtil;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
 import spireCafe.util.TexLoader;
-import spireCafe.util.Wiz;
 import spireCafe.util.cutsceneStrings.CutsceneStrings;
 import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
 import spireCafe.util.devcommands.Cafe;
@@ -51,13 +45,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.function.Consumer;
 
-import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
-import static spireCafe.interactables.patrons.missingno.MissingnoPatches.*;
-import static spireCafe.interactables.patrons.missingno.MissingnoUtil.getRandomPokeSFX;
-import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
 import static spireCafe.interactables.attractions.bookshelf.BookshelfAttraction.PAGE_CONFIG_KEY;
+import static spireCafe.interactables.patrons.missingno.MissingnoPatches.*;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
-import static spireCafe.util.Wiz.atb;
 
 @SuppressWarnings({"unused"})
 @SpireInitializer
@@ -252,10 +242,6 @@ public class Anniv7Mod implements
         }
     }
 
-    public static void addSaveFields() {
-        BaseMod.addSaveField(SavableCurrentRunSeenInteractables.SaveKey, new SavableCurrentRunSeenInteractables());
-    }
-
     public static final ImFloat shake_power = new ImFloat(0.007f);
     public static final ImFloat shake_rate = new ImFloat(0.1f);
     public static final ImFloat shake_speed = new ImFloat(2f);
@@ -269,20 +255,6 @@ public class Anniv7Mod implements
         ImGui.sliderFloat("Glitch Speed", shake_speed.getData(), 0, 10);
         ImGui.sliderFloat("Glitch Block Size", shake_block_size.getData(), 0, 1.0f);
         ImGui.sliderFloat("Glitch Color Rate", shake_color_rate.getData(), 0, 0.01f);
-    }
-
-    public static class SavableCurrentRunSeenInteractables implements CustomSavable<HashSet<String>> {
-        public final static String SaveKey = "CurrentRunSeenInteractables";
-
-        @Override
-        public HashSet<String> onSave() {
-            return currentRunSeenInteractables;
-        }
-
-        @Override
-        public void onLoad(HashSet<String> s) {
-            currentRunSeenInteractables = s == null ? new HashSet<>() : s;
-        }
     }
 
     private static Consumer<String> getWidePotionsWhitelistMethod() {
@@ -434,6 +406,9 @@ public class Anniv7Mod implements
 
     private static final float ENTRYCOST_CHECKBOX_X = 400f;
     private static final float ENTRYCOST_CHECKBOX_Y = 685f;
+    private static final float SHADERS_CHECKBOX_SERIES_X = 400f;
+    private static final float SHADERS_CHECKBOX_Y = 600f;
+
 
     private void initializeConfig() {
         UIStrings configStrings = CardCrawlGame.languagePack.getUIString(makeID("ConfigMenuText"));
@@ -445,6 +420,12 @@ public class Anniv7Mod implements
                 (label) -> {},
                 (button) -> setCafeEntryCostConfig(button.enabled));
         settingsPanel.addUIElement(cafeEntryCostToggle);
+
+        FixedModLabeledToggleButton disableShaders = new FixedModLabeledToggleButton(configStrings.TEXT[4], SHADERS_CHECKBOX_SERIES_X, SHADERS_CHECKBOX_Y, Color.WHITE, FontHelper.tipBodyFont, getDisableShadersConfig(), null,
+                (label) -> {},
+                (button) -> setDisableShadersConfig(button.enabled));
+        settingsPanel.addUIElement(disableShaders);
+
 
         BaseMod.registerModBadge(badge, configStrings.TEXT[0], configStrings.TEXT[1], configStrings.TEXT[2], settingsPanel);
     }
@@ -463,6 +444,22 @@ public class Anniv7Mod implements
             }
         }
     }
+
+    public static boolean getDisableShadersConfig() {
+        return modConfig != null && modConfig.getBool("disableShaders");
+    }
+
+    public static void setDisableShadersConfig(boolean bool) {
+        if (modConfig != null) {
+            modConfig.setBool("disableShaders", bool);
+            try {
+                modConfig.save();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     private void initializeSavedData() {
     }

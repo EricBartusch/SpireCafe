@@ -51,7 +51,7 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = Locator.class)
         public static void startBuffer(AbstractPlayer __instance, SpriteBatch sb) {
-            if(MissingnoUtil.isGlitched()) {
+            if(MissingnoUtil.isGlitched() && !Anniv7Mod.getDisableShadersConfig()) {
                 sb.flush();
                 if (buffer == null) {
                     buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
@@ -72,7 +72,7 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = LocatorTwo.class)
         public static void endBufferAndDraw(AbstractPlayer __instance, SpriteBatch sb) {
-            if(MissingnoUtil.isGlitched()) {
+            if(MissingnoUtil.isGlitched() && !Anniv7Mod.getDisableShadersConfig()) {
                 sb.flush();
                 buffer.end();
                 if (playerTexture == null) {
@@ -128,7 +128,7 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = Locator.class)
         public static void startBuffer(AbstractMonster __instance, SpriteBatch sb) {
-            if(MissingnoUtil.isMonsterGlitched(__instance)) {
+            if(MissingnoUtil.isMonsterGlitched(__instance) && !getDisableShadersConfig()) {
                 sb.flush();
                 if (buffer == null) {
                     buffer = new FrameBuffer(Pixmap.Format.RGBA8888, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), false);
@@ -149,7 +149,7 @@ public class MissingnoPatches {
 
         @SpireInsertPatch(locator = LocatorTwo.class)
         public static void endBufferAndDraw(AbstractMonster __instance, SpriteBatch sb) {
-            if(MissingnoUtil.isMonsterGlitched(__instance)) {
+            if(MissingnoUtil.isMonsterGlitched(__instance) && !getDisableShadersConfig()) {
                 sb.flush();
                 buffer.end();
                 if (monsterTexture == null) {

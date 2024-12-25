@@ -288,6 +288,8 @@ public class Dialog {
             }
             for (OptionButton button : optionList) {
                 button.render(sb);
+            }
+            for (OptionButton button : optionList) {
                 button.renderCardPreview(sb);
                 button.renderRelicPreview(sb);
             }

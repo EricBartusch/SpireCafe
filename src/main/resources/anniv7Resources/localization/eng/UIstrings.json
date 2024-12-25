@@ -9,7 +9,13 @@
   },
   "${ModID}:CafeUI": {
     "TEXT": [
-      "Return"
+      "Return",
+      "Leave"
+    ]
+  },
+  "${ModID}:Authors": {
+    "TEXT": [
+      "Author(s): "
     ]
   },
   "${ModID}:Missingno": {

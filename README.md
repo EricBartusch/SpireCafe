@@ -1,6 +1,6 @@
 # MtS Modding Anniversary 7: Spire Café
 ## Preamble
-A group project for the seventh anniversary of Mod the Spire. Between acts the player stops off at the renowed Spire Café, at the cost of getting a bit less healing. Within they will be able to interact with patrons, attractions, merchants and the bartender, of course.  
+A group project for the seventh anniversary of Mod the Spire. Between acts the player stops off at the renowned Spire Café, at the cost of getting a bit less healing. Within they will be able to interact with patrons, attractions, merchants and the bartender, of course.  
 For a full write-up, please see the [Design Doc](https://docs.google.com/document/d/1MN2Hh8NqupNfpMXXp6IdBxrz0AaZ2eMWuggbWKGvZLE/edit?usp=sharing)  
 For a list of contributions, take a look at the [Contributions List](https://docs.google.com/spreadsheets/d/1PgRwGs0OWx8RKYv1QEsrOm7HJdfaqULHRM5qSSHo_yU/edit?usp=sharing)
   
@@ -24,6 +24,7 @@ Images unique to your interactable should be saved in `anniv7Resources/images/[t
 Localization is saved in `anniv7Resources/localization/[langKey]/[interactable]/`.  
   
 To test your contribution, you can force it to spawn by modifying the CafeRoom:onEnterRoom logic and spawning the event with `event anniv7:CafeRoom`.  
+You can also guarantee your interactable to spawn with the new `cafe [type] [?slot]` console command.  
 **Please make sure to add your interactable to the [Contributions List](https://docs.google.com/spreadsheets/d/1PgRwGs0OWx8RKYv1QEsrOm7HJdfaqULHRM5qSSHo_yU/edit?usp=sharing) before your PR. If it's an idea you want to code yourself, you can add it there even without having started coding it.**
 
 ### Contribution guidelines
@@ -35,7 +36,12 @@ To make suitable content and help the PR process go smoothly, follow these guide
 - All gameplay affecting interactions must have a cost, no free power increases (and keep things reasonably balanced, the Cafe should not be a huge power level boost)
 - In general avoid NPCs or attractions that are simple one-liners with no special effects (but non-gameplay affects are fine, such as Makeup Table making you sparkle for the rest of the run)
 - All cutscenes must be exitable by the player without doing a transaction
+- No combats in the Café, there are too many edge cases and the code is complex enough already
 - We expect contributions to be complete (including art) before merging, but it's okay to make a PR while still working on the art
+
+#### Adding a Page to the Bookshelf
+To add a Page to the bookshelf you have to make a new class in the `spireCafe/interactables/attractions/bookshelf/pages` package that extends the AbstractPage class. The class contains many features which you can make use of to add a bit of logic to your pages.  
+For the actual text you'll want to add an entry to `anniv7Resources/localization/[langKey]/BookshelfAttraction/UIstrings.json` with the key being the same as the ID of your Page class.
 
 #### Cards, relics, powers, etc.
 Cards, relics, powers, patches, and everything else should go in the package you created for your interactable.

@@ -6,7 +6,11 @@
     "(Gk) erasels",
     "Mindbomber",
     "Darkglade",
-    "Pandemonium"
+    "Pandemonium",
+    "Dracia",
+    "Coda",
+    "Indi",
+    "iry"
   ],
   "description": "${project.description}",
   "version": "${project.version}",

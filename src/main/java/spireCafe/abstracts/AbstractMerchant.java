@@ -10,9 +10,9 @@ import spireCafe.screens.CafeMerchantScreen;
 import java.util.ArrayList;
 
 public abstract class AbstractMerchant extends AbstractCafeInteractable {
-    public String name;
     public TextureRegion background;
     public ArrayList<AbstractArticle> articles = new ArrayList<>();
+    public ArrayList<AbstractArticle> toAdd = new ArrayList<>();
     public ArrayList<AbstractArticle> toRemove = new ArrayList<>();
     public boolean wasShopRolled = false;
 
@@ -40,7 +40,14 @@ public abstract class AbstractMerchant extends AbstractCafeInteractable {
         toRemove.add(article);
     }
 
+    //Called after the custom screen is close in case you need to take care of lingering effects or something
+    public void onCloseShop() {}
+
     public void updateShop() {
+        for (AbstractArticle article : toAdd) {
+            articles.add(article);
+        }
+        toAdd.clear();
         for (AbstractArticle article : articles) {
             article.update();
         }
@@ -57,7 +64,4 @@ public abstract class AbstractMerchant extends AbstractCafeInteractable {
             article.render(sb);
         }
     }
-
-
-    //TODO: Placement Logic
 }

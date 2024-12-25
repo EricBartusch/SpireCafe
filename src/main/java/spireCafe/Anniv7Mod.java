@@ -4,6 +4,7 @@ import basemod.AutoAdd;
 import basemod.BaseMod;
 import basemod.ModPanel;
 import basemod.abstracts.CustomSavable;
+import basemod.devcommands.ConsoleCommand;
 import basemod.helpers.RelicType;
 import basemod.interfaces.*;
 import com.badlogic.gdx.Gdx;
@@ -34,12 +35,14 @@ import spireCafe.cardvars.SecondMagicNumber;
 import spireCafe.interactables.attractions.Makeup.MakeupTableAttraction;
 import spireCafe.interactables.patrons.missingno.DribbleCardAction;
 import spireCafe.interactables.patrons.missingno.MissingnoUtil;
+import spireCafe.interactables.attractions.makeup.MakeupTableAttraction;
 import spireCafe.screens.CafeMerchantScreen;
 import spireCafe.ui.FixedModLabeledToggleButton.FixedModLabeledToggleButton;
 import spireCafe.util.TexLoader;
 import spireCafe.util.Wiz;
 import spireCafe.util.cutsceneStrings.CutsceneStrings;
 import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
+import spireCafe.util.devcommands.Cafe;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -52,6 +55,7 @@ import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
 import static spireCafe.interactables.patrons.missingno.MissingnoPatches.*;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.getRandomPokeSFX;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.isGlitched;
+import static spireCafe.interactables.attractions.bookshelf.BookshelfAttraction.PAGE_CONFIG_KEY;
 import static spireCafe.patches.CafeEntryExitPatch.CAFE_ENTRY_SOUND_KEY;
 import static spireCafe.util.Wiz.atb;
 
@@ -171,6 +175,7 @@ public class Anniv7Mod implements
         try {
             Properties defaults = new Properties();
             defaults.put("cafeEntryCost", "TRUE");
+            defaults.put(PAGE_CONFIG_KEY, "");
             modConfig = new SpireConfig(modID, "anniv7Config", defaults);
         } catch (Exception e) {
             e.printStackTrace();
@@ -237,6 +242,7 @@ public class Anniv7Mod implements
         initializeSavedData();
         BaseMod.addEvent(CafeRoom.ID, CafeRoom.class, "CafeDungeon");
         BaseMod.addCustomScreen(new CafeMerchantScreen());
+        ConsoleCommand.addCommand("cafe", Cafe.class);
     }
 
     public static void addPotions() {
@@ -244,8 +250,6 @@ public class Anniv7Mod implements
             Consumer<String> whitelist = getWidePotionsWhitelistMethod();
 
         }
-
-
     }
 
     public static void addSaveFields() {
@@ -335,6 +339,7 @@ public class Anniv7Mod implements
         loadStringsFile(langKey, PotionStrings.class);
         loadStringsFile(langKey, EventStrings.class);
         loadStringsFile(langKey, MonsterStrings.class);
+        loadStringsFile(langKey, BlightStrings.class);
     }
 
     public void loadInteractableStrings(Collection<String> interactableIDs, String langKey) {
@@ -356,6 +361,7 @@ public class Anniv7Mod implements
             loadStringsFile(languageAndInteractable, PotionStrings.class);
             loadCutsceneStringsFile(languageAndInteractable, CutsceneStrings.class);
             loadStringsFile(languageAndInteractable, MonsterStrings.class);
+            loadStringsFile(languageAndInteractable, BlightStrings.class);
         }
     }
 
@@ -459,6 +465,10 @@ public class Anniv7Mod implements
     }
 
     private void initializeSavedData() {
+    }
+
+    public static void addSaveFields() {
+        BaseMod.addSaveField(SavableCurrentRunSeenInteractables.SaveKey, new SavableCurrentRunSeenInteractables());
         BaseMod.addSaveField(makeID("AppliedMakeup"), new CustomSavable<Boolean>() {
             @Override
             public Boolean onSave() {
@@ -470,6 +480,20 @@ public class Anniv7Mod implements
                 MakeupTableAttraction.isAPrettySparklingPrincess = state;
             }
         });
+    }
+
+    public static class SavableCurrentRunSeenInteractables implements CustomSavable<HashSet<String>> {
+        public final static String SaveKey = "CurrentRunSeenInteractables";
+
+        @Override
+        public HashSet<String> onSave() {
+            return currentRunSeenInteractables;
+        }
+
+        @Override
+        public void onLoad(HashSet<String> s) {
+            currentRunSeenInteractables = s == null ? new HashSet<>() : s;
+        }
     }
 }
 

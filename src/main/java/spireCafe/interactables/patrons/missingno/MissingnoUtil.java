@@ -1,5 +1,6 @@
 package spireCafe.interactables.patrons.missingno;
 
+import basemod.BaseMod;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Pixmap;
@@ -7,21 +8,24 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.FrameBuffer;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.GdxRuntimeException;
+import com.megacrit.cardcrawl.actions.common.DrawCardAction;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.Hitbox;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.relics.AbstractRelic;
+import com.megacrit.cardcrawl.relics.FrozenEye;
 import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
 import com.megacrit.cardcrawl.vfx.combat.*;
+import spireCafe.util.Wiz;
 
 import java.lang.reflect.Constructor;
 import java.util.*;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static com.megacrit.cardcrawl.dungeons.AbstractDungeon.miscRng;
-import static spireCafe.Anniv7Mod.makeID;
-import static spireCafe.Anniv7Mod.makeShaderPath;
+import static spireCafe.Anniv7Mod.*;
+import static spireCafe.util.Wiz.atb;
 
 public class MissingnoUtil {
     public static boolean isGlitched() {
@@ -187,5 +191,46 @@ public class MissingnoUtil {
         }
 
         return effects;
+    }
+
+    private static boolean hasDribbled;
+    private static boolean hasNameChanged;
+    private static boolean hasShuffledRelics;
+    private static boolean hasPlayedSfx;
+    public static void doMissingnoStuff() {
+        if(time > 10.0f) {
+            hasDribbled = false;
+            hasNameChanged = false;
+            hasShuffledRelics = false;
+            hasPlayedSfx = false;
+            time = 0f;
+        }
+        if(time > 3.5f && !hasDribbled) {
+            hasDribbled = true; //One attempt per cycle
+            if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
+                if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty() && AbstractDungeon.player.hand.size() != BaseMod.MAX_HAND_SIZE) { //Don't be mean, only do this if it won't affect gameplay much
+                    atb(new DrawCardAction(1, new DribbleCardAction()));
+                }
+            }
+        }
+
+        if(time > 6.0f && !hasNameChanged) {
+            hasNameChanged = true;
+            if(isGlitched() && Wiz.isInCombat() && miscRng.randomBoolean(.33f)) {
+                AbstractDungeon.topPanel.setPlayerName();
+            }
+        }
+
+        if(time > 8.0f && !hasShuffledRelics) {
+            MissingnoUtil.shuffleRelics();
+            hasShuffledRelics = true;
+        }
+
+        if(time > 2.0f && !hasPlayedSfx) {
+            hasPlayedSfx = true;
+            if(isGlitched() && miscRng.randomBoolean(.05f)) {
+                CardCrawlGame.sound.play(getRandomPokeSFX());
+            }
+        }
     }
 }

@@ -14,7 +14,6 @@ import com.evacipated.cardcrawl.modthespire.lib.*;
 import com.evacipated.cardcrawl.modthespire.patcher.PatchingException;
 import com.megacrit.cardcrawl.actions.animations.VFXAction;
 import com.megacrit.cardcrawl.actions.common.DrawCardAction;
-import com.megacrit.cardcrawl.actions.utility.SFXAction;
 import com.megacrit.cardcrawl.cards.AbstractCard;
 import com.megacrit.cardcrawl.characters.AbstractPlayer;
 import com.megacrit.cardcrawl.core.AbstractCreature;
@@ -22,21 +21,17 @@ import com.megacrit.cardcrawl.core.Settings;
 import com.megacrit.cardcrawl.helpers.CardLibrary;
 import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import com.megacrit.cardcrawl.screens.SingleCardViewPopup;
-import com.megacrit.cardcrawl.vfx.AbstractGameEffect;
-import com.megacrit.cardcrawl.vfx.combat.WeightyImpactEffect;
 import javassist.CannotCompileException;
 import javassist.CtBehavior;
 import spireCafe.abstracts.AbstractSCCard;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
-import java.util.List;
 
 import static com.badlogic.gdx.math.MathUtils.random;
 import static spireCafe.Anniv7Mod.*;
 import static spireCafe.interactables.patrons.missingno.MarkovChain.MarkovType.CARD;
 import static spireCafe.interactables.patrons.missingno.MissingnoUtil.createBuffer;
-import static spireCafe.interactables.patrons.missingno.MissingnoUtil.getRandomPokeSFX;
 import static spireCafe.util.CardArtRoller.computeCard;
 import static spireCafe.util.Wiz.atb;
 

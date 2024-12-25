@@ -418,47 +418,10 @@ public class Anniv7Mod implements
     }
 
     public static float time = 0f;
-    private boolean hasDribbled ;
-    private boolean hasNameChanged;
-    private boolean hasShuffledRelics;
-    private boolean hasPlayedSfx;
     @Override
     public void receivePostUpdate() {
         time += Gdx.graphics.getRawDeltaTime();
-        if(time > 10.0f) {
-            hasDribbled = false;
-            hasNameChanged = false;
-            hasShuffledRelics = false;
-            hasPlayedSfx = false;
-            time = 0f;
-        }
-        if(time > 3.5f && !hasDribbled) {
-            hasDribbled = true; //One attempt per cycle
-            if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
-                if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty() && AbstractDungeon.player.hand.size() != BaseMod.MAX_HAND_SIZE) { //Don't be mean, only do this if it won't affect gameplay much
-                    atb(new DrawCardAction(1, new DribbleCardAction()));
-                }
-            }
-        }
-
-        if(time > 6.0f && !hasNameChanged) {
-            hasNameChanged = true;
-            if(isGlitched() && Wiz.isInCombat() && miscRng.randomBoolean(.33f)) {
-                AbstractDungeon.topPanel.setPlayerName();
-            }
-        }
-
-        if(time > 8.0f && !hasShuffledRelics) {
-            MissingnoUtil.shuffleRelics();
-            hasShuffledRelics = true;
-        }
-
-        if(time > 2.0f && !hasPlayedSfx) {
-            hasPlayedSfx = true;
-            if(isGlitched() && miscRng.randomBoolean(.05f)) {
-                CardCrawlGame.sound.play(getRandomPokeSFX());
-            }
-        }
+        MissingnoUtil.doMissingnoStuff();
     }
 
     private ModPanel settingsPanel;

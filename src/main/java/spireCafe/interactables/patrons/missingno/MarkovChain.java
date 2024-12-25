@@ -25,6 +25,9 @@ public class MarkovChain {
             case FLAVOR:
                 fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-relic-flavors.txt");
                 break;
+            case PAGE:
+                fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-pages.txt");
+                break;
             default:
                 fileHandle = Gdx.files.internal(modID + "Resources/localization/eng/MissingnoPatron/markov-text.txt");
         }
@@ -79,6 +82,6 @@ public class MarkovChain {
         CARD,
         RELIC,
         FLAVOR,
-        BOOK
+        PAGE
     }
 }

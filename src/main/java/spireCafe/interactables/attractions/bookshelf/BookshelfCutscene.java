@@ -2,6 +2,7 @@ package spireCafe.interactables.attractions.bookshelf;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
@@ -19,6 +20,8 @@ import spireCafe.util.ImageHelper;
 import spireCafe.util.TexLoader;
 import spireCafe.util.cutsceneStrings.CutsceneStrings;
 import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
+
+import java.awt.*;
 
 import static spireCafe.Anniv7Mod.makeID;
 import static spireCafe.interactables.attractions.bookshelf.BookshelfAttraction.NUM_PAGES;
@@ -75,7 +78,13 @@ public class BookshelfCutscene extends AbstractCutscene {
             sb.draw(ImageMaster.WHITE_SQUARE_IMG, 0, 0, Settings.WIDTH, Settings.HEIGHT);
             sb.setColor(Color.WHITE);
             sb.draw(PAGE_IMG, 0f,0f, Settings.WIDTH, Settings.HEIGHT);
-            FontHelper.renderSmartText(sb, FontHelper.turnNumFont, bookshelf.pageText, 435f * Settings.xScale, Settings.HEIGHT * 0.9f, 1050f * Settings.scale, 35f * Settings.yScale, TEXT_COL);
+            BitmapFont font;
+            if(bookshelf.selectedPage.font != null) {
+                font = bookshelf.selectedPage.font;
+            } else {
+                font = FontHelper.turnNumFont;
+            }
+            FontHelper.renderSmartText(sb, font, bookshelf.pageText, 435f * Settings.xScale, Settings.HEIGHT * 0.9f, 1050f * Settings.scale, 35f * Settings.yScale, TEXT_COL);
             bookshelf.selectedPage.render(sb);
         } else {
             super.render(sb);

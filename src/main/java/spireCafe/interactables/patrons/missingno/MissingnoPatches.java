@@ -312,7 +312,7 @@ public class MissingnoPatches {
 
         @SpirePostfixPatch
         public static void AtTheEnd() {
-            if(time > 9.8) {
+            if(time > 99.8) {
                 Collections.shuffle(RelicLibrary.specialList);
             }
         }

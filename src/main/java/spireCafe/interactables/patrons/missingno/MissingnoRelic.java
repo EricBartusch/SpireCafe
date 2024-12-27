@@ -48,9 +48,11 @@ public class MissingnoRelic extends AbstractSCRelic {
 
     @Override
     public boolean checkTrigger() {
+        counter++;
+        flash();
         if(counter == threshold) {
             flash();
-            atb(new SFXAction("BUFF_1"));
+            atb(new SFXAction("BUFF_1")); //TODO: Want better sfx
             counter = 0;
             threshold = miscRng.random(10);
             return true;
@@ -61,7 +63,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onPlayCard(AbstractCard c, AbstractMonster m) {
         if(miscRng.random(100) < 3 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -69,7 +70,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onObtainCard(AbstractCard c) {
         if(miscRng.random(100) < 10 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -77,22 +77,21 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void atBattleStart() {
         if(miscRng.random(100) < 5 ) {
-            counter++;
             checkTrigger();
+
         }
     }
 
     @Override
     public void atTurnStartPostDraw() {
         if(miscRng.random(100) < 3 ) {
-            counter++;
             checkTrigger();
         }
     }
 
     @Override
     public void atTurnStart() {
-        if(miscRng.random(100) < 5 ) {
+        if(miscRng.random(100) < 10 ) {
             AbstractDungeon.player.drawPile.addToRandomSpot(new MissingnoCard());
         }
     }
@@ -100,7 +99,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onPlayerEndTurn() {
         if(miscRng.random(100) < 3 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -108,7 +106,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onManualDiscard() {
         if(miscRng.random(100) < 10 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -116,7 +113,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onUseCard(AbstractCard targetCard, UseCardAction useCardAction) {
         if(miscRng.random(100) < 1 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -124,7 +120,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onMonsterDeath(AbstractMonster m) {
         if(miscRng.random(100) < 3 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -132,7 +127,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onRest() {
         if(miscRng.random(100) < 10 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -140,7 +134,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onShuffle() {
         if(miscRng.random(100) < 10 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -148,7 +141,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onSmith() {
         if(miscRng.random(100) < 15 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -156,7 +148,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onEnterRoom(AbstractRoom room) {
         if(miscRng.random(100) < 5 ) {
-            counter++;
             checkTrigger();
         }
     }
@@ -164,7 +155,6 @@ public class MissingnoRelic extends AbstractSCRelic {
     @Override
     public void onCardDraw(AbstractCard drawnCard) {
         if(miscRng.random(100) < 5 ) {
-            counter++;
             checkTrigger();
         }
     }

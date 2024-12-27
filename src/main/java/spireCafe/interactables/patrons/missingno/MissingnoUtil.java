@@ -198,14 +198,14 @@ public class MissingnoUtil {
     private static boolean hasShuffledRelics;
     private static boolean hasPlayedSfx;
     public static void doMissingnoStuff() {
-        if(time > 10.0f) {
+        if(time > 100.0f) {
             hasDribbled = false;
             hasNameChanged = false;
             hasShuffledRelics = false;
             hasPlayedSfx = false;
             time = 0f;
         }
-        if(time > 3.5f && !hasDribbled) {
+        if(time > 35f && !hasDribbled) {
             hasDribbled = true; //One attempt per cycle
             if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
                 if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty() && AbstractDungeon.player.hand.size() != BaseMod.MAX_HAND_SIZE) { //Don't be mean, only do this if it won't affect gameplay much
@@ -214,19 +214,19 @@ public class MissingnoUtil {
             }
         }
 
-        if(time > 6.0f && !hasNameChanged) {
+        if(time > 60f && !hasNameChanged) {
             hasNameChanged = true;
             if(isGlitched() && Wiz.isInCombat() && miscRng.randomBoolean(.33f)) {
                 AbstractDungeon.topPanel.setPlayerName();
             }
         }
 
-        if(time > 8.0f && !hasShuffledRelics) {
+        if(time > 80f && !hasShuffledRelics) {
             MissingnoUtil.shuffleRelics();
             hasShuffledRelics = true;
         }
 
-        if(time > 2.0f && !hasPlayedSfx) {
+        if(time > 20f && !hasPlayedSfx) {
             hasPlayedSfx = true;
             if(isGlitched() && miscRng.randomBoolean(.05f)) {
                 CardCrawlGame.sound.play(getRandomPokeSFX());

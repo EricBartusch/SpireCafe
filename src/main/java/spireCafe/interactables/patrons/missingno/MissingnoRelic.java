@@ -52,7 +52,7 @@ public class MissingnoRelic extends AbstractSCRelic {
         flash();
         if(counter == threshold) {
             flash();
-            atb(new SFXAction("BUFF_1")); //TODO: Want better sfx
+            atb(new SFXAction("BUFF_1"));
             counter = 0;
             threshold = miscRng.random(10);
             return true;

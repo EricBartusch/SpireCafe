@@ -26,7 +26,7 @@ public class MissingnoCutscene extends AbstractCutscene {
     public static BitmapFont font;
     private static final FileHandle FONT_FILE = Gdx.files.internal(modID + "Resources/fonts/missingno/Gridlockd.ttf");
 
-    //TODO: When localization is implemented, this will need to be modified to use some sort of default text
+    // When localization is implemented, this will need to be modified to use some sort of default text
     // Either that or they can be super cool and generate their own Markov text in whatever language
 
     public MissingnoCutscene(AbstractNPC character) {

@@ -1,7 +1,7 @@
 {
-  "${ModID}:ExamplePatron": {
+  "${ModID}:MissingnoPatron": {
     "NAMES": [
-      "Example Patron"
+      "Missingno Patron"
     ],
     "TEXT": [
     ]

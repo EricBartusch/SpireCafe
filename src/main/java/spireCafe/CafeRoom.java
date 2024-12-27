@@ -104,7 +104,7 @@ public class CafeRoom extends AbstractEvent {
         }
         this.bartender = (AbstractBartender) createInteractable(bartenderClz, 1650 * Settings.xScale, AbstractDungeon.floorY + 5 * Settings.yScale);
         checkNameAndAuthors(bartender, bartenderClz);
-//        Anniv7Mod.currentRunSeenInteractables.add(bartender.id);
+        Anniv7Mod.currentRunSeenInteractables.add(bartender.id);
 
         //TODO: Fix position logic so overlap is accounted for and prevented
         Collections.shuffle(possiblePatrons, new java.util.Random(rng.randomLong()));

@@ -6,22 +6,14 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.CardCrawlGame;
 import com.megacrit.cardcrawl.core.Settings;
-import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 import com.megacrit.cardcrawl.helpers.FontHelper;
 import com.megacrit.cardcrawl.helpers.ImageMaster;
-import com.megacrit.cardcrawl.vfx.BorderFlashEffect;
 import spireCafe.Anniv7Mod;
 import spireCafe.abstracts.AbstractCutscene;
-import spireCafe.abstracts.AbstractNPC;
 import spireCafe.interactables.attractions.bookshelf.pages.AbstractPage;
-import spireCafe.interactables.attractions.makeup.MakeupCutscene;
-import spireCafe.interactables.attractions.makeup.MakeupTableAttraction;
-import spireCafe.util.ImageHelper;
 import spireCafe.util.TexLoader;
 import spireCafe.util.cutsceneStrings.CutsceneStrings;
 import spireCafe.util.cutsceneStrings.LocalizedCutsceneStrings;
-
-import java.awt.*;
 
 import static spireCafe.Anniv7Mod.makeID;
 import static spireCafe.interactables.attractions.bookshelf.BookshelfAttraction.NUM_PAGES;

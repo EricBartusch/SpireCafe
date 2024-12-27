@@ -206,9 +206,14 @@ public class CardArtRoller {
                 if (c.reskinInfo(q) != null) {
                     return c.reskinInfo(q);
                 } else {
+                    // I did this on purpose because my code was making some colorless cards in the compendium to flip back and forth.
+                    // I forget what was originally causing it to happen/couldn't figure it out, so I took a hammer to this
                     return new ReskinInfo(q, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), false);
                 }
             });
+
+            // There's a check to see if the card has had an image generated before. I need it to always try to make
+            // a new image each time the card is constructed
             if(c.cardID.equals(MissingnoCard.ID)) {
                 infos.remove(MissingnoCard.ID);
             }
@@ -246,7 +251,6 @@ public class CardArtRoller {
             List<AbstractCard> skillCards = CardLibrary.getAllCards().stream()
                     .filter(card -> AbstractCard.CardType.SKILL.equals(card.type))
                     .collect(Collectors.toList());
-
             r = new ReskinInfo(skillCards.get(rng.random(skillCards.size() - 1)).cardID, rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), rng.random(0.35f, 0.65f), false);
         } else {
             r = infos.get(c.cardID);

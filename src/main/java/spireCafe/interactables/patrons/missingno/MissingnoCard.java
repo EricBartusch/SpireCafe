@@ -45,6 +45,8 @@ public class MissingnoCard extends AbstractSCCard {
         exhaust = true;
         String markovText = MarkovChain.getInstance(CARD).generateText(5, 15).replaceAll("[~@]", "").replaceAll("#.", "");
         rawDescription = rawDescription + markovText;
+
+        // Here begins the art roller skullduggery
         if (CardLibrary.cards != null && !CardLibrary.cards.isEmpty()) {
             computeCard(this, true);
             needsArtRefresh = false;

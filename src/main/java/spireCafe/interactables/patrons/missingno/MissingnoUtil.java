@@ -205,9 +205,10 @@ public class MissingnoUtil {
             hasPlayedSfx = false;
             time = 0f;
         }
+
         if(time > 35f && !hasDribbled) {
             hasDribbled = true; //One attempt per cycle
-            if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.33f)) {
+            if (Wiz.isInCombat() && isGlitched() && miscRng.randomBoolean(.66f)) {
                 if (!AbstractDungeon.player.hasRelic(FrozenEye.ID) && !AbstractDungeon.player.drawPile.isEmpty() && AbstractDungeon.player.hand.size() != BaseMod.MAX_HAND_SIZE) { //Don't be mean, only do this if it won't affect gameplay much
                     atb(new DrawCardAction(1, new DribbleCardAction()));
                 }

@@ -4,11 +4,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.megacrit.cardcrawl.core.Settings;
 import spireCafe.Anniv7Mod;
-import spireCafe.abstracts.AbstractCafeInteractable;
 import spireCafe.interactables.patrons.missingno.MarkovChain;
+import spireCafe.interactables.patrons.missingno.MissingnoPatron;
 import spireCafe.util.TexLoader;
-
-import java.util.List;
 
 import static spireCafe.Anniv7Mod.modID;
 import static spireCafe.interactables.patrons.missingno.MarkovChain.MarkovType.PAGE;
@@ -34,9 +32,10 @@ public class MissingnoPage extends AbstractPage {
     }
 
     @Override
-    public boolean preferredSpawn(List<AbstractCafeInteractable> currentInhabitants) {
-        return true;
+    public boolean canSpawn() {
+        return Anniv7Mod.allTimeSeenInteractables.contains(MissingnoPatron.ID);
     }
+
 
     @Override
     public void render(SpriteBatch sb) {

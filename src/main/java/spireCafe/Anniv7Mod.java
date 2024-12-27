@@ -70,6 +70,7 @@ public class Anniv7Mod implements
     public static Anniv7Mod thismod;
     public static SpireConfig modConfig = null;
     public static HashSet<String> currentRunSeenInteractables = null;
+    public static HashSet<String> allTimeSeenInteractables = null;
 
     public static final String modID = "anniv7";
 
@@ -389,10 +390,6 @@ public class Anniv7Mod implements
         BaseMod.addAudio(POKE7, makePath("audio/poke7.mp3"));
         BaseMod.addAudio(POKE8, makePath("audio/poke8.mp3"));
         BaseMod.addAudio(POKE9, makePath("audio/poke9.mp3"));
-
-
-
-
     }
 
     public static float time = 0f;
@@ -460,12 +457,12 @@ public class Anniv7Mod implements
         }
     }
 
-
     private void initializeSavedData() {
     }
 
     public static void addSaveFields() {
         BaseMod.addSaveField(SavableCurrentRunSeenInteractables.SaveKey, new SavableCurrentRunSeenInteractables());
+        BaseMod.addSaveField(SavableAllTimeSeenInteractables.SaveKey, new SavableAllTimeSeenInteractables());
         BaseMod.addSaveField(makeID("AppliedMakeup"), new CustomSavable<Boolean>() {
             @Override
             public Boolean onSave() {
@@ -490,6 +487,20 @@ public class Anniv7Mod implements
         @Override
         public void onLoad(HashSet<String> s) {
             currentRunSeenInteractables = s == null ? new HashSet<>() : s;
+        }
+    }
+
+    public static class SavableAllTimeSeenInteractables implements CustomSavable<HashSet<String>> {
+        public final static String SaveKey = "AllTimeSeenInteractables";
+
+        @Override
+        public HashSet<String> onSave() {
+            return allTimeSeenInteractables;
+        }
+
+        @Override
+        public void onLoad(HashSet<String> s) {
+            allTimeSeenInteractables = s == null ? new HashSet<>() : s;
         }
     }
 }

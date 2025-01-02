@@ -116,10 +116,12 @@ public class CafeEntryExitPatch {
 
                 modifyProceedButton(ReflectionHacks.getPrivateStatic(ProceedButton.class, "DRAW_Y"), true);
 
-                try {
-                    Anniv7Mod.saveSeenInteractables(allTimeSeenInteractables);
-                } catch(IOException e) {
-                    throw new RuntimeException(e);
+                if(allTimeSeenInteractables != null) {
+                    try {
+                        Anniv7Mod.saveSeenInteractables(allTimeSeenInteractables);
+                    } catch (IOException e) {
+                        throw new RuntimeException(e);
+                    }
                 }
             }
         }

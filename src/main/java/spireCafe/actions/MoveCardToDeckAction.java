@@ -7,7 +7,7 @@ import com.megacrit.cardcrawl.dungeons.AbstractDungeon;
 public class MoveCardToDeckAction extends AbstractGameAction {
 
     AbstractCard card;
-    MoveCardToDeckAction(AbstractCard card) {
+    public MoveCardToDeckAction(AbstractCard card) {
         this.card = card;
     }
     @Override

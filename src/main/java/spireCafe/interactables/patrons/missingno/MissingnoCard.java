@@ -55,9 +55,9 @@ public class MissingnoCard extends AbstractSCCard {
             computeCard(this, true);
             needsArtRefresh = false;
         }
-        baseMagicNumber = magicNumber = random(5);
-        baseDamage = damage = random(12);
-        baseBlock = block = random(8);
+        baseMagicNumber = magicNumber = random(1, 5);
+        baseDamage = damage = random(6, 12);
+        baseBlock = block = random(3, 8);
         initializeDescription();
     }
 
@@ -93,6 +93,9 @@ public class MissingnoCard extends AbstractSCCard {
         if(((int) time) % 3 == 0 && !hasUpdatedCardText) {
             String markovText = MarkovChain.getInstance(CARD).generateText(5, 15).replaceAll("[~@]", "").replaceAll("#.", "");
             rawDescription = cardStrings.DESCRIPTION + markovText;
+            baseMagicNumber = magicNumber = random(1, 5);
+            baseDamage = damage = random(6, 12);
+            baseBlock = block = random(3, 8);
             initializeDescription();
             hasUpdatedCardText = true;
         }

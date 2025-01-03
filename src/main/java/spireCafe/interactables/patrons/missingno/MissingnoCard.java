@@ -180,7 +180,6 @@ public class MissingnoCard extends AbstractSCCard {
                 glitchShader.setUniformf("u_shake_speed", speed);
                 glitchShader.setUniformf("u_shake_block_size", size);
                 glitchShader.setUniformf("u_shake_color_rate", shake_color_rate.get());
-                glitchShader.setUniformf("u_manual_enable_shift", cardShouldGlitch ? 1 : 0);
                 glitchShader.setUniformf("u_manual_enable_shift", 1);
             }
         }

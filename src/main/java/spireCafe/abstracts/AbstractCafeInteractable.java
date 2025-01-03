@@ -19,9 +19,6 @@ import com.megacrit.cardcrawl.monsters.AbstractMonster;
 import spireCafe.Anniv7Mod;
 import spireCafe.CafeRoom;
 
-import java.io.IOException;
-import java.util.ArrayList;
-
 import static spireCafe.Anniv7Mod.allTimeSeenInteractables;
 import static spireCafe.Anniv7Mod.makeID;
 

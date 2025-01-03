@@ -144,7 +144,7 @@ public class CafeRoom extends AbstractEvent {
         this.merchant = (AbstractMerchant) createInteractable(merchantClz, 200 * Settings.xScale, AbstractDungeon.floorY - 15 * Settings.yScale);
         checkNameAndAuthors(merchant, merchantClz);
         merchant.initialize();
-            Anniv7Mod.currentRunSeenInteractables.add(merchant.id);
+        Anniv7Mod.currentRunSeenInteractables.add(merchant.id);
         decoSystem = new DecorationSystem();
     }
 

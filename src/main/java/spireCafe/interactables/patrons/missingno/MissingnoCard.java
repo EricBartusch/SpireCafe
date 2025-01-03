@@ -42,7 +42,6 @@ public class MissingnoCard extends AbstractSCCard {
 
     public static final String ID = makeID(MissingnoCard.class.getSimpleName());
     private static final CardStrings cardStrings = CardCrawlGame.languagePack.getCardStrings(ID);
-
     private static final float rate = 0.7f;
     private static final float speed = 2.2f;
     private static final float size = 0.5f;

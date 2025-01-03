@@ -199,6 +199,7 @@ public class MissingnoUtil {
     private static boolean hasPlayedSfx;
     public static boolean hasUpdatedCardText;
     public static boolean cardShouldGlitch;
+
     public static void doMissingnoStuff() {
         if(time > 100.0f) {
             hasDribbled = false;

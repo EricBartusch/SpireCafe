@@ -204,12 +204,12 @@ public class MissingnoUtil {
     public static boolean cardShouldGlitch;
 
     public static void doMissingnoStuff() {
-        if(time > 40.0f) {
+        if(time > 100.0f) {
             hasDribbled = false;
             hasNameChanged = false;
             hasShuffledRelics = false;
             hasPlayedSfx = false;
-            time = 30f;
+            time = 0f;
         }
 
         if(time > 35f && !hasDribbled) {
